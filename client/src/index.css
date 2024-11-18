@@ -1,0 +1,206 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+ /* Shades of Primary Dark (#641087) */
+  --primary-dark-100: #e2d3eb; /* Lightest */
+  --primary-dark-200: #c5a7d7;
+  --primary-dark-300: #a87bc3;
+  --primary-dark-400: #8a4faf;
+  --primary-dark-500: #641087; /* Base */
+  --primary-dark-600: #570e76;
+  --primary-dark-700: #490b64;
+  --primary-dark-800: #3b0853;
+  --primary-dark-900: #2e0641; /* Darkest */
+
+  /* Shades of Primary Light (#F95C97) */
+  --primary-light-100: #fee6ee; /* Lightest */
+  --primary-light-200: #fdbdd2;
+  --primary-light-300: #fb93b5;
+  --primary-light-400: #fa6a99;
+  --primary-light-500: #F95C97; /* Base */
+  --primary-light-600: #c24a79;
+  --primary-light-700: #8b375b;
+  --primary-light-800: #55243d;
+  --primary-light-900: #1e101f; /* Darkest */
+
+  /* paragraph color  */
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --gray-1000: #121416;
+
+  /* light color  */
+  --light:#fff;
+  --dark:#000;
+
+  /* font family  */
+  --ff-1: "Sora",sans-serif;
+  --ff-2:"Poppins","Sora",sans-serif;
+
+  --max-width: 1296px;
+  --fixed-width: 620px;
+  --nav-height: 4rem;
+  --transition: all 0.3s linear;
+  --spacing: 0.1rem;
+  --radius: 0.5rem;
+  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body{
+  background: var(--gray-100);
+  color: var(--dark);
+  font-weight: 400;
+  font-family: var(--ff-2);
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+a{
+  text-decoration: none;
+}
+ul{
+  list-style-type: none;
+}
+
+h1,h2,h3,h4,h5{
+  font-family: var(--ff-1);
+  letter-spacing: var(--spacing);
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+h1{
+  font-size: 2.5rem;
+}
+h2{
+  font-size: 2rem;
+}
+h3{
+  font-size: 1.5rem;
+}
+h4{
+  font-size: 1rem;
+}
+h5{
+  font-size: 0.875rem;
+}
+p{
+  margin-bottom: 1.25rem;
+  color:var(--gray-600);
+}
+button{
+  font-family: inherit;
+}
+.button{
+  text-transform: capitalize;
+  padding: 0.375rem 0.875rem;
+  background: var(--primary-dark-800);
+  font-weight: 500;
+  display: inline-block;
+  letter-spacing: var(--spacing);
+  color: var(--light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  border-color: transparent;
+  box-shadow:  1px 1px 8px var(--gray-300);
+}
+.button:hover{
+  background: var(--primary-dark-400);
+}
+
+.button-secondary {
+  background-color: var(--primary-light-500);
+}
+
+.button-secondary:hover {
+  background-color: var(--primary-light-300); 
+}
+
+/* Global classes  */
+.page{
+  min-height: calc(100vh - 2 * var(--nav-height));
+}
+.flx-cntr{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loadder{
+  width: 10rem;
+  height: 10rem;
+  font-size: 2rem;
+}
+.section{
+  padding: 5rem 0;
+}
+.section-center{
+  width: 90vw;
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+@media screen and (min-width: 992px){
+  .section-center{
+    width: 95vw;
+  }
+}
+.image-fit{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.offcanvas.offcanvas-end.show{
+  .offcanvas-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .navbar-nav.cstm-navbar-nav{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+.offcanvas{
+  .icon{
+    font-size: 2.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+  }
+  .icon:hover{
+    color:var(--secondary-300);
+  }
+  .cart{
+    position: relative;
+    margin-right: 2rem;
+  }
+  .cart-count{
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    right: -0.5rem;
+    background: var(--primary-light-500);
+    width:1.5rem;
+    height:1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+  }
+}
