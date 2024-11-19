@@ -3,6 +3,15 @@ import { getAllProductsThunk } from "./productsThunk";
 
 export const getAllProducts = createAsyncThunk("products/getAllProducts",getAllProductsThunk);
 
+const initialFilters = {
+    name:"",
+    category:"",
+    company:"",
+    colors:[],
+    price:200,
+    freeShipping:false
+}
+
 const initialState = {
   productsLoading: false,
   productsError: false,
@@ -11,7 +20,10 @@ const initialState = {
   pages:0,
   featuredProducts: [],
   isGrid:true,
-  maxPrice:500
+  maxPrice:500,
+  sort:"price",
+  page:1,
+  filters:{...initialFilters}
 };
 
 const productsSlice = createSlice({
@@ -20,6 +32,21 @@ const productsSlice = createSlice({
   reducers: {
     setView:(state,action)=>{
       state.isGrid = action.payload
+    },
+    updateFilters:(state,action)=>{
+      state.filters = {...state.filters,...action.payload};
+      state.page = 1;
+    },
+    updateSort:(state,action)=>{
+      state.sort = action.payload;
+    },
+    updatePage:(state,action)=>{
+      state.page = action.payload;
+    },
+    clearFilters:(state)=>{
+      state.filters = {...initialFilters};
+      state.sort = "price";
+      state.page = 1;
     }
   },
   extraReducers: (builder) => {
@@ -41,5 +68,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const {setView} = productsSlice.actions;
+export const {setView,updateFilters,clearFilters,updateSort,updatePage} = productsSlice.actions;
 export default productsSlice.reducer;

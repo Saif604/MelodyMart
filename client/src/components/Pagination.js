@@ -1,11 +1,10 @@
 import React from "react";
 import { Pagination as BsPagination, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePage } from "../features/Filter/filterSlice";
+import { updatePage } from "../features/AllProducts/productsSlice";
 const Pagination = () => {
   const dispatch = useDispatch();
-  const { pages } = useSelector((state) => state.products);
-  const { page } = useSelector((state) => state.filters);
+  const { pages,page } = useSelector((state) => state.products);
   const handlePageChange = (currPage) => {
     if (currPage >= 1 && page <= pages) {
       dispatch(updatePage(currPage));

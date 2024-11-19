@@ -10,10 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { productsLoading, productsError } = useSelector(
+  const { productsLoading, productsError,filters,sort,page } = useSelector(
     (state) => state.products
   );
-  const {filters,sort,page} = useSelector((state) => state.filters);
 
   useEffect(() => {
     const {name,category,company,freeShipping,colors,price} = filters;
@@ -28,7 +27,7 @@ const Products = () => {
     navigate(`?${params}`);
     
     dispatch(getAllProducts(params));
-  }, [dispatch, filters,sort,page]);
+  }, [dispatch, filters,sort,page,navigate]);
 
   if (productsLoading) {
     return (

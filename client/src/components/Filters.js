@@ -1,7 +1,7 @@
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { updateFilters, clearFilters } from "../features/Filter/filterSlice";
+import { updateFilters,clearFilters } from "../features/AllProducts/productsSlice";
 import { formatPrice } from "../utils";
 import { useMemo, useState } from "react";
 const COMPANIES = [
@@ -37,10 +37,7 @@ const COLORS = [
 ];
 const Filters = () => {
   const dispatch = useDispatch();
-  const { maxPrice } = useSelector((state) => state.products);
-  const { category, company, freeShipping, price, colors, name } = useSelector(
-    (state) => state.filters.filters
-  );
+  const { maxPrice,filters:{category,company,freeShipping,price,colors,name} } = useSelector((state) => state.products);
   const [search, setSearch] = useState(name || "");
 
   const handleFilterChange = (filter) => {

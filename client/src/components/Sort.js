@@ -1,15 +1,14 @@
 import { BsGridFill, BsList } from "react-icons/bs";
 import { Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setView } from "../features/AllProducts/productsSlice";
-import { updateSort } from "../features/Filter/filterSlice";
+import { setView,updateSort } from "../features/AllProducts/productsSlice";
 
 const Sort = () => {
   const dispatch = useDispatch();
-  const { sort } = useSelector((state) => state.filters);
-  const { totalProducts,isGrid } = useSelector((state) => state.products);
+  const { totalProducts,isGrid,sort} = useSelector((state) => state.products);
 
   const handleSort = (sortType)=>{
+    console.log(sortType)
     dispatch(updateSort(sortType));
   }
   const handleView = (isGridView)=>{
