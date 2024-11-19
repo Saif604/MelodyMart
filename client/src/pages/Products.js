@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
-import { getAllProducts } from "../features/Product/productSlice";
+import { getAllProducts } from "../features/AllProducts/productsSlice";
 import {useNavigate} from "react-router-dom";
 
 import { Filters, Sort, ProductList, Pagination } from "../components";

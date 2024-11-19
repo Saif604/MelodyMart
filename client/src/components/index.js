@@ -11,5 +11,8 @@ import GridItem from "./GridItem";
 import NavDash from "./NavDash";
 import Sidebar from "./Sidebar";
 import Protected from "./Protected";
+import ProductImages from "./ProductImages";
+import AddToCart from "./AddToCart";
+import Stars from "./Stars";
 
-export {NavBar,SharedLayout,Footer,Toast,TextInput,Filters, Sort,ProductList,Pagination,GridItem,NavDash,Sidebar,Protected};
+export {NavBar,SharedLayout,Footer,Toast,TextInput,Filters, Sort,ProductList,Pagination,GridItem,NavDash,Sidebar,Protected,ProductImages,Stars,AddToCart};

@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Product from "../models/Product.js";
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
@@ -118,4 +118,13 @@ const getAllProducts = async (req, res) => {
   res.status(StatusCodes.OK).json({ products, nbhits, pages,featured:featuredProducts });
 };
 
-export { createProduct, getAllProducts};
+const getSingleProduct = async(req,res) =>{
+  const {id:productID} = req.params;
+  const product = await Product.findOne({_id:productID});
+  if(!product){
+    throw new NotFoundError(`No product with id:${productID}`);
+  }
+  res.status(StatusCodes.OK).json(product);
+}
+
+export { createProduct, getAllProducts,getSingleProduct};
