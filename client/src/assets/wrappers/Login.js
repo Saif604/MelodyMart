@@ -6,16 +6,16 @@ const Wrapper = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--clr-white);
+  background: radial-gradient(circle, var(--primary-light-300), var(--primary-dark-900));
 
   .form-container {
-    width: 95vw;
+    width: 85vw;
     max-width: var(--fixed-width);
     padding: 2rem;
-    background: var(--clr-white);
+    background: var(--light);
     border-radius: 0.25rem;
-    border: 1px solid var(--clr-border);
-    border-top: 5px solid var(--clr-dark);
+    border: 1px solid var(--gray-200);
+    border-top: 5px solid var(--primary-dark-800);
     box-shadow: var(--dark-shadow);
   }
   .status {

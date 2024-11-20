@@ -1,7 +1,8 @@
+import Login from "./Login";
+import Register from "./Register";
 import NavBar from "./NavBar";
 import SharedLayout from "./SharedLayout";
 import Footer from "./Footer";
-import Toast from "./Toast";
 import TextInput from "./TextInput";
 import Filters from "./Filters";
 import Sort from "./Sort";
@@ -15,4 +16,4 @@ import ProductImages from "./ProductImages";
 import AddToCart from "./AddToCart";
 import Stars from "./Stars";
 
-export {NavBar,SharedLayout,Footer,Toast,TextInput,Filters, Sort,ProductList,Pagination,GridItem,NavDash,Sidebar,Protected,ProductImages,Stars,AddToCart};
+export {Login,Register,NavBar,SharedLayout,Footer,TextInput,Filters, Sort,ProductList,Pagination,GridItem,NavDash,Sidebar,Protected,ProductImages,Stars,AddToCart};

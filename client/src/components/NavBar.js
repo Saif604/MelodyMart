@@ -1,14 +1,21 @@
 import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
-import styled from "styled-components";
-import { BiLogInCircle, BiCart} from "react-icons/bi";
+import { BiLogInCircle, BiCart, BiLogOutCircle } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
-// import Wrapper from "../assets/wrappers/NavBar.js";
+import Wrapper from "../assets/wrappers/NavBar.js";
 import { useState } from "react";
+import { logoutUser } from "../features/Authenticate/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
   const showCanvas = () => setShow(true);
   const hideCanvas = () => setShow(false);
+  const { user } = useSelector((state) => state.auth);
+
+  const handleLogout = () =>{
+    dispatch(logoutUser())
+  }
 
   return (
     <Wrapper expand={"md"} sticky="top">
@@ -40,6 +47,11 @@ const NavBar = () => {
               <Nav.Link as={NavLink} to="/products" onClick={hideCanvas}>
                 Products
               </Nav.Link>
+              {user && (
+                <Nav.Link as={NavLink} to="/dashboard" onClick={hideCanvas}>
+                  Dashboard
+                </Nav.Link>
+              )}
             </Nav>
             <Nav className="cstm-navbar-nav">
               <Nav.Link
@@ -51,9 +63,12 @@ const NavBar = () => {
                 <BiCart className="icon" />
                 <span className="cart-count">1</span>
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/login" onClick={hideCanvas}>
+              {
+                !user ? (<Nav.Link as={NavLink} to="/login" onClick={hideCanvas}>
                 Login <BiLogInCircle className="icon" />
-              </Nav.Link>
+              </Nav.Link>):(<span onClick={handleLogout}>Logout <BiLogOutCircle className="icon"/></span>)
+              }
+              
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
@@ -62,40 +77,3 @@ const NavBar = () => {
   );
 };
 export default NavBar;
-
-const Wrapper = styled(Navbar)`
-  background: var(--primary-dark-800);
-  height: var(--nav-height);
-
-  .navbar-brand{
-    color: var(--light);
-    font-weight: 500;
-    letter-spacing: var(--spacing);
-  }
-
-  .nav-link {
-    color: var(--light);
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-  .nav-link.active {
-    color: var(--primary-dark-100);
-  }
-  .offcanvas-body {
-    justify-content: space-between;
-  }
-  .icon {
-    font-size: 1.5rem;
-  }
-
-  .navbar-toggler {
-    background: var(--light);
-  }
-  span {
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-`;

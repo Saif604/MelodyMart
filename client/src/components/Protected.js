@@ -1,15 +1,18 @@
+import { Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const Protected = ({ children }) => {
-  const { user, userLoading } = useSelector((state) => state.user);
+  const { user, isLoading } = useSelector((state) => state.auth);
 
-  if (userLoading) {
-    <h1>Loading....</h1>;
+  if (isLoading) {
+    <div className="page flx-cntr">
+      <Spinner animation="grow" variant="secondary" className="loadder" />
+    </div>;
     return;
   }
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
   return children;
 };

@@ -1,17 +1,22 @@
 import styled from "styled-components";
 import { Navbar } from "react-bootstrap";
-
 const Wrapper = styled(Navbar)`
-  background: var(--clr-primary-5);
+  background: var(--primary-dark-800);
   height: var(--nav-height);
 
+  .navbar-brand {
+    color: var(--light);
+    font-weight: 500;
+    letter-spacing: var(--spacing);
+  }
+
   .nav-link {
-    color: var(--clr-white);
+    color: var(--light);
     font-weight: 500;
     letter-spacing: 1px;
   }
   .nav-link.active {
-    color: var(--clr-primary-10);
+    color: var(--primary-dark-100);
   }
   .offcanvas-body {
     justify-content: space-between;
@@ -20,15 +25,16 @@ const Wrapper = styled(Navbar)`
     font-size: 1.5rem;
   }
 
-  .navbar-toggler{
-    background: var(--clr-white);
+  .navbar-toggler {
+    background: var(--light);
   }
-  span{
+  span {
     color: #fff;
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    cursor:pointer;
+    cursor: pointer;
+    gap: 0.25rem;
   }
 `;
 export default Wrapper;

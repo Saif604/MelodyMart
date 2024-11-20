@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
   user = await User.create({ name, email, password, role });
   const tokenUser = createTokenUser(user);
   attachCookieToResponse(res, tokenUser);
-  res.status(StatusCodes.CREATED).json({ user: tokenUser,msg:`${tokenUser.name} is sucessfully registered`});
+  res.status(StatusCodes.CREATED).json({ user: tokenUser});
 };
 const loginUser = async (req, res) => {
   const { email, password } = await req.body;
@@ -29,14 +29,14 @@ const loginUser = async (req, res) => {
   const tokenUser = createTokenUser(user);
   attachCookieToResponse(res, tokenUser);
 
-  res.status(StatusCodes.OK).json({ user: tokenUser,msg:`${tokenUser.name} is sucessfully loggedin` });
+  res.status(StatusCodes.OK).json({ user: tokenUser});
 };
 const logoutUser = async (req, res) => {
   res.cookie("token", "logout", {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
-  res.status(StatusCodes.OK).json({ msg: "Success! Your logged out" });
+  res.status(StatusCodes.OK).json({user:null});
 };
 
 export { loginUser, registerUser, logoutUser };
