@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
 import { attachCookieToResponse, createTokenUser } from "../utils/index.js";
 
-const registerUser = async (req, res) => {
+const register = async (req, res) => {
   const { name, email, password } = req.body;
   let user = await User.findOne({ email });
   if (user) {
@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
   attachCookieToResponse(res, tokenUser);
   res.status(StatusCodes.CREATED).json({ user: tokenUser});
 };
-const loginUser = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = await req.body;
   if (!email || !password)
     throw new BadRequestError("Please provide email and password");
@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ user: tokenUser});
 };
-const logoutUser = async (req, res) => {
+const logout = async (req, res) => {
   res.cookie("token", "logout", {
     expires: new Date(Date.now()),
     httpOnly: true,
@@ -39,4 +39,4 @@ const logoutUser = async (req, res) => {
   res.status(StatusCodes.OK).json({user:null});
 };
 
-export { loginUser, registerUser, logoutUser };
+export { login, register, logout};

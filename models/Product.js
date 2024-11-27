@@ -17,14 +17,14 @@ const ProductSchema = new mongoose.Schema({
     required: [true, "Please provide product description"],
     maxLength: [1000, "Description cann't be more than 1000 characters long"],
   },
-  image: {
-    type: String,
-    default: "/uploads/example.jpeg",
+  images: {
+    type: [String],
+    required:[true,"Please provide images"]
   },
   category:{
     type:String,
     required:[true,"Please provide product category"],
-    enum:["flute","piano","guitar","drum"]
+    enum:["flute","piano","guitar","drum","accordion"]
   },
   company:{
     type:String,
@@ -65,7 +65,21 @@ const ProductSchema = new mongoose.Schema({
     ref:"User",
     required:true
   }
-},{timestamps:true});
+},{timestamps:true,toJSON:{virtuals:true},toObject:{virtuals:true}});
 
+ProductSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "product",
+  justOne: false,
+  // match:{rating:5}
+});
+ProductSchema.pre(
+  "deleteOne",
+  { document: true, query: false },
+  async function (next) {
+    await this.model("Review").deleteMany({ product: this._id });
+  }
+);
 
 export default mongoose.model("Product",ProductSchema);

@@ -22,7 +22,7 @@ const Home = () => {
       <section className="hero">
         <div className="section-center">
           <Row className="hero-content">
-            <Col md={{ span: 6 }}>
+            <Col md={{ span: 6, offset:2 }}>
               <h3 className="hero-heading">Welcome</h3>
               <p className="hero-info">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam

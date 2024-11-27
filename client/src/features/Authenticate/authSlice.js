@@ -21,11 +21,20 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", logoutUserThunk);
 const initialState = {
   user: getUserFromLocalStorage(),
   isLoading: false,
+  isSidebarOpen:false
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
+  reducers:{
+    toggleSidebar:(state)=>{
+      state.isSidebarOpen = !state.isSidebarOpen;
+    },
+    clearStore:(state)=>{
+      console.log("clearStore")
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -74,5 +83,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const {toggleSidebar,clearStore} = authSlice.actions;
 
 export default authSlice.reducer;

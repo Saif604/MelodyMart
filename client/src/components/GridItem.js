@@ -1,14 +1,14 @@
-import styled from "styled-components"
 import { BiSearch } from "react-icons/bi"
 import { Link } from "react-router-dom";
 import { formatPrice } from "../utils";
+import styled from "styled-components";
 
 const GridItem = (props) => {
-    const {_id,name,image,price} = props;
+    const {_id,name,images,price} = props;
   return (
     <Wrapper>
         <div className="image-container">
-            <img src={image} alt={name} className="image-fit"/>
+            <img src={images[0]} alt={name} className="image-fit"/>
             <Link to={`/products/${_id}`} className="search-icon">
                 <BiSearch/>
             </Link>

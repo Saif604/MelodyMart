@@ -3,17 +3,17 @@ import { Container, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 const ProductImages = (props) => {
   const { images } = props;
-  const [mainImg,setMainImg] = useState(0);
+  const [mainImg,setMainImg] = useState(images?.[0]);
   return (
     <Wrapper fluid>
       <Row className="mb-3">
-        <img src={images[mainImg]?.url} alt="main-image" className="image-fit main-img" />
+        <img src={mainImg} alt="main-image" className="image-fit main-img" />
       </Row>
       <Row>
         {
-          images.map(({imageID,url})=>(
-            <Col key={imageID}>
-              <img src={url} alt="prod-img" className={`image-fit gallery-img ${imageID===mainImg ? "active":""}`} onClick={()=>setMainImg(imageID)}/>
+          images?.map((src,index)=>(
+            <Col key={index}>
+              <img src={src} alt="prod-img" className={`image-fit gallery-img ${src === mainImg ? "active":""}`} onClick={()=>setMainImg(src)}/>
             </Col>
           ))
         }

@@ -7,4 +7,13 @@ const getSingleProductThunk = async (id, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 };
-export { getSingleProductThunk };
+const getSingleProductReviewsThunk = async (productID, thunkAPI) =>{
+  try{
+      const {data} = await axios.get(`/api/v1/products/${productID}/reviews`);
+      return data;
+  }
+  catch(error){
+    thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+}
+export { getSingleProductThunk, getSingleProductReviewsThunk };

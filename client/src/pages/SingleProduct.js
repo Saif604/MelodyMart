@@ -2,16 +2,19 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Row, Col, Spinner } from "react-bootstrap";
 import { useEffect } from "react";
-import { getSingleProduct } from "../features/Product/productSlice";
+import { getSingleProduct, getSingleProductReviews } from "../features/Product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AddToCart, ProductImages, Stars } from "../components";
 import { formatPrice } from "../utils";
+
 const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { isLoading, isError, product } = useSelector((state) => state.product);
+  
   useEffect(() => {
     dispatch(getSingleProduct(id));
+    dispatch(getSingleProductReviews(id));
   }, [dispatch, id]);
   if (isLoading)
     return (
@@ -25,21 +28,15 @@ const SingleProduct = () => {
     name,
     price,
     numOfReviews,
-    averageRatings,
+    averageRating,
     category,
     company,
     colors,
     description,
-    featured,
-    freeShipping,
-    image,
+    images,
     inventory,
     _id,
   } = product;
-  const images = Array.from({ length: 4 }, (_, index) => ({
-    imageID: index,
-    url: image,
-  }));
   return (
     <Wrapper>
       <Row className="section section-center page g-3">
@@ -48,7 +45,7 @@ const SingleProduct = () => {
         </Col>
         <Col lg={6}>
           <h2>{name}</h2>
-          <Stars ratings={averageRatings} reviews={numOfReviews} />
+          <Stars ratings={averageRating} reviews={numOfReviews} productId={_id}/>
           <p className="price">{formatPrice(price)}</p>
           <p>{description}</p>
           <p className="info">
@@ -68,7 +65,7 @@ const SingleProduct = () => {
             {_id}
           </p>
           <hr />
-          {inventory > 0 && (<AddToCart product={{id:_id,colors:colors,stocks:inventory}}/>)}
+          {inventory > 0 && (<AddToCart product={product}/>)}
         </Col>
       </Row>
     </Wrapper>

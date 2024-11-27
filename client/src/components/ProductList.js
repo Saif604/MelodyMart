@@ -4,6 +4,7 @@ import { GridItem } from "./index";
 import { useSelector } from "react-redux";
 import { formatPrice } from "../utils";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 const ProductList = () => {
   const navigate = useNavigate();
   const { products, isGrid } = useSelector((state) => state.products);
@@ -19,10 +20,10 @@ const ProductList = () => {
             </Col>
           ))
         : products.map((product) => (
-            <Row key={product._id} className="g-2">
+            <ListItem key={product._id} className="g-2">
               <Col md={4} className="image-container">
                 <img
-                  src={product.image}
+                  src={product.images[0]}
                   alt={product.name}
                   className="image-fit"
                 />
@@ -40,10 +41,16 @@ const ProductList = () => {
                   details
                 </button>
               </Col>
-            </Row>
+            </ListItem>
           ))}
     </Row>
   );
 };
 export default ProductList;
 
+const ListItem = styled(Row)`
+  .image-container{
+    height:13rem;
+    overflow: hidden;
+  }
+`

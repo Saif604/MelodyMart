@@ -5,6 +5,7 @@ import Wrapper from "../assets/wrappers/NavBar.js";
 import { useState } from "react";
 import { logoutUser } from "../features/Authenticate/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import AuthBtn from "./AuthBtn.js";
 
 const NavBar = () => {
   const [show, setShow] = useState(false);
@@ -12,10 +13,11 @@ const NavBar = () => {
   const showCanvas = () => setShow(true);
   const hideCanvas = () => setShow(false);
   const { user } = useSelector((state) => state.auth);
+  const { totalItems } = useSelector((state) => state.cart);
 
-  const handleLogout = () =>{
-    dispatch(logoutUser())
-  }
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
 
   return (
     <Wrapper expand={"md"} sticky="top">
@@ -61,14 +63,14 @@ const NavBar = () => {
                 onClick={hideCanvas}
               >
                 <BiCart className="icon" />
-                <span className="cart-count">1</span>
+                <span className="cart-count">{totalItems}</span>
               </Nav.Link>
-              {
+              {/* {
                 !user ? (<Nav.Link as={NavLink} to="/login" onClick={hideCanvas}>
                 Login <BiLogInCircle className="icon" />
               </Nav.Link>):(<span onClick={handleLogout}>Logout <BiLogOutCircle className="icon"/></span>)
-              }
-              
+              } */}
+              <AuthBtn hideCanvas={hideCanvas} />
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

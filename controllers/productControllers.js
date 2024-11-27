@@ -5,38 +5,58 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
 const createProduct = async (req, res) => {
-  if (!req.files) {
-    throw new BadRequestError("No file uploded");
+  if (!req.files || !req.files.image) {
+    throw new BadRequestError("No file uploaded");
   }
-  const { image } = req.files;
-  if (Array.isArray(image)) {
-    throw new BadRequestError("Please upload single image");
-  }
-  if (!image.mimetype.startsWith("image")) {
-    throw new BadRequestError("Please upload image");
-  }
-  const maxSize = 1024 * 1024;
-  if (image.size > maxSize) {
-    throw new BadRequestError("Please upload image smaller than 1MB");
-  }
-  const product = new Product({ ...req.body, user: req.user.userId });
-  await product.validate();
 
-  //upload to cloudinary
-  const result = await cloudinary.uploader.upload(
-    req.files.image.tempFilePath,
-    {
+  const { image } = req.files;
+
+  // Ensure the images are in an array format
+  const images = Array.isArray(image) ? image : [image];
+
+  // Limit the number of images to 5
+  if (images.length > 5) {
+    throw new BadRequestError("You can upload up to 5 images");
+  }
+
+  const urls = []; // Array to store Cloudinary URLs
+
+  for (const img of images) {
+    // Validate each image
+    if (!img.mimetype.startsWith("image")) {
+      throw new BadRequestError("Please upload only images");
+    }
+    const maxSize = 1024 * 1024;
+    if (img.size > maxSize) {
+      throw new BadRequestError("Please upload images smaller than 1MB");
+    }
+
+    // Upload the image to Cloudinary
+    const result = await cloudinary.uploader.upload(img.tempFilePath, {
       use_filename: true,
       folder: "Fizmar",
-    }
-  );
-  product.image = result.secure_url;
+    });
+
+    // Push the secure URL to the array
+    urls.push(result.secure_url);
+
+    // Remove the temporary file
+    fs.unlinkSync(img.tempFilePath);
+  }
+
+  // Create the product with the uploaded image URLs
+  const product = new Product({
+    ...req.body,
+    user: req.user.userId,
+    images: [...urls], // Store the array of image URLs
+  });
+
+  await product.validate();
   await product.save();
-  fs.unlinkSync(req.files.image.tempFilePath);
 
   res
     .status(StatusCodes.CREATED)
-    .json({ msg: "Product successfully uploaded" });
+    .json({ msg: "Product successfully uploaded", images: urls });
 };
 
 const getAllProducts = async (req, res) => {
@@ -127,4 +147,26 @@ const getSingleProduct = async(req,res) =>{
   res.status(StatusCodes.OK).json(product);
 }
 
-export { createProduct, getAllProducts,getSingleProduct};
+const updateProduct = async (req, res) => {
+  const { id: productID } = req.params;
+  const product = await Product.findOneAndUpdate({ _id: productID }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!product) {
+    throw new NotFoundError(`No product with id: ${productID}`);
+  }
+  res.status(StatusCodes.OK).json({ product });
+};
+const deleteProduct = async (req, res) => {
+  const { id: productID } = req.params;
+  const product = await Product.findOne({ _id: productID });
+  if (!product) {
+    throw new NotFoundError(`No product with id: ${productID}`);
+  }
+  await product.deleteOne();
+  res.status(StatusCodes.OK).json({ msg: "success product removed" });
+};
+
+
+export { createProduct, getAllProducts,getSingleProduct, updateProduct,deleteProduct};

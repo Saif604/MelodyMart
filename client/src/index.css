@@ -91,7 +91,7 @@ h3{
   font-size: 1.5rem;
 }
 h4{
-  font-size: 1rem;
+  font-size: 1.25rem;
 }
 h5{
   font-size: 0.875rem;
@@ -114,14 +114,14 @@ button{
   border-radius: var(--radius);
   cursor: pointer;
   transition: var(--transition);
+  box-shadow:  1px 1px 8px var(--light);
   border-color: transparent;
-  box-shadow:  1px 1px 8px var(--gray-300);
 }
 .button:disabled{
   background: var(--primary-dark-300);
 }
 .button:hover{
-  background: var(--primary-dark-400);
+  background: var(--primary-dark-900);
 }
 
 .button-secondary {

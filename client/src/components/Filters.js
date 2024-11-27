@@ -16,6 +16,8 @@ const CATEGORIES = [
   { _id: 2, name: "Drum", value: "drum" },
   { _id: 3, name: "Flute", value: "flute" },
   { _id: 4, name: "Guitar", value: "guitar" },
+  {_id:5,name:"Accordion", value:"accordion"},
+  {_id:6,name:"Piano", value:"piano"},
 ];
 const COLORS = [
   {

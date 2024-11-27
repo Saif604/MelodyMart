@@ -1,25 +1,30 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import "express-async-errors";
 import fileUpload from "express-fileupload";
-import dotenv from "dotenv";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 import authRouter from "./routes/authRouters.js";
+import userRouter from "./routes/userRouters.js"
 import productRouter from "./routes/productRouters.js";
+import reviewRouter from "./routes/reviewRouters.js";
+import orderRouter from "./routes/orderRouters.js";
+
 
 import errorHandlerMiddleware from "./middlewares/errorHandler.js";
 import notFoundMiddleware from "./middlewares/notFound.js";
 
 import connectDB from "./db/connect.js";
 
-dotenv.config();
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
 const server = express();
 
 server.use(morgan("tiny"));
@@ -27,12 +32,14 @@ server.use(cookieParser(process.env.COOKIE_SECRET));
 server.use(express.json());
 server.use(fileUpload({useTempFiles:true}));
 
-
 server.get("/api/v1", (req, res) => {
   res.status(200).json({ msg: "Hello" });
 });
 server.use("/api/v1/auth", authRouter);
-server.use("/api/v1/products",productRouter);
+server.use("/api/v1/users", userRouter);
+server.use("/api/v1/products", productRouter);
+server.use("/api/v1/reviews", reviewRouter);
+server.use("/api/v1/orders", orderRouter);
 
 server.use(notFoundMiddleware);
 server.use(errorHandlerMiddleware);

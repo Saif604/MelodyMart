@@ -27,7 +27,14 @@ const UserSchema = new mongoose.Schema({
     enum:["user","admin"],
     default:"user"
   }
-});
+},{toJSON:{virtuals:true},toObject:{virtuals:true}});
+
+UserSchema.virtual("reviews",{
+  ref:"Review",
+  localField:"_id",
+  foreignField:"user",
+  justOne:false
+})
 
 UserSchema.pre("save",async function(){
     if(!this.isModified("password")) return;
