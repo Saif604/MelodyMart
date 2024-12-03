@@ -27,6 +27,7 @@ import Navbar from "./NavDash";
 import NavLinks from "./NavLinks";
 import AuthBtn from "./AuthBtn";
 import Checkout from "./Checkout";
+import DataTable from "./DataTable";
 
 export {
   Logo,
@@ -57,5 +58,6 @@ export {
   Navbar,
   NavLinks,
   AuthBtn,
-  Checkout
+  Checkout,
+  DataTable
 };

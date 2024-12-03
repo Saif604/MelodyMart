@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import HeroImg from "../assets/images/hero.svg";
 import { GridItem } from "../components/index.js";
@@ -7,16 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllProducts } from "../features/AllProducts/productsSlice.js";
 const Home = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
   const { featuredProducts } = useSelector((state) => state.products);
   const featured = featuredProducts?.slice(0, 3);
-  const handleBtnClick = () => {
-    navigate("/products");
-  };
   return (
     <Wrapper>
       <section className="hero">
@@ -33,9 +28,6 @@ const Home = () => {
                 repellat harum dignissimos odit optio eaque, nobis tempora nihil
                 quibusdam tempore quo?
               </p>
-              <button className="button" onClick={handleBtnClick}>
-                shop
-              </button>
             </Col>
           </Row>
         </div>

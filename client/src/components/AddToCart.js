@@ -57,10 +57,10 @@ const AddToCart = ({product}) => {
           decrease={decrease}
         />
         <Link
-          to="/cart"
+          to="/dashboard/cart"
           className="button"
           onClick={() => {
-            dispatch(addToCart({ ...product, color, amount}));
+            dispatch(addToCart({ ...product, color, amount,product:id}));
           }}
         >
           add to cart

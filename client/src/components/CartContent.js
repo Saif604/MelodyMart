@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../features/Cart/cartSlice";
 
 const CartContent = () => {
-  const {cart} = useSelector((states)=>states.cart);
+  const { cart } = useSelector((states) => states.cart);
   const dispatch = useDispatch();
   return (
     <Wrapper className="section section-center">
@@ -18,22 +18,23 @@ const CartContent = () => {
       })}
       <hr />
       <div className="link-container">
-        <Link to="/products" className="link-btn">
+        <Link to="/dashboard/products" className="link-btn">
           continue shopping
         </Link>
         <button
           type="button"
           className="link-btn clear-btn"
-          onClick={()=>dispatch(clearCart())}
+          onClick={() => dispatch(clearCart())}
         >
           clear shopping cart
         </button>
       </div>
-       <CartTotals />
+      <CartTotals />
     </Wrapper>
   );
 };
 const Wrapper = styled.section`
+  width: 100%;
   .link-container {
     display: flex;
     justify-content: space-between;

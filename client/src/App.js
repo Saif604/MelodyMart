@@ -1,7 +1,6 @@
-import { Home, Products,/* Login,*/Logger, Cart,SingleProduct, Orders,Reviews, AddProduct} from "./pages";
-import {Profile, Shared} from "./pages/Dashboard";
+import { Home, Products, Logger, Cart,SingleProduct, Orders,Reviews,Profile,Shared,Error} from "./pages";
 import { SharedLayout,Protected,Login,Register, Checkout } from "./components";
-import {ReviewModal} from "./components/Modals";
+import {ReviewModal,OrderModal} from "./components/Modals";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,10 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
-          <Route path="products/:id" element={<SingleProduct />} />
-          <Route path="products/:id" element={<ReviewModal />} />
           <Route path="products" element={<Products />} />
-          <Route path="cart" element={<Cart />} />
         </Route>
         <Route
           path="/dashboard"
@@ -32,8 +28,8 @@ const App = () => {
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="orders" element={<OrderModal />} />
           <Route path="reviews" element={<Reviews />} />
-          <Route path="add-product" element={<AddProduct />} />
         </Route>
         <Route
           path="/login"
@@ -65,6 +61,7 @@ const App = () => {
             </Logger>
           }
         />
+        <Route path="*" element={<Error/>}/>
       </Routes>
       <ToastContainer position="top-center" />
     </Router>

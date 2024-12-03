@@ -1,25 +1,28 @@
-import { BiSearch } from "react-icons/bi"
+import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../utils";
 import styled from "styled-components";
 
 const GridItem = (props) => {
-    const {_id,name,images,price} = props;
+  const { _id, name, images, price } = props;
+  const isDashboard = window.location.pathname.split("/").includes("dashboard");
   return (
     <Wrapper>
-        <div className="image-container">
-            <img src={images[0]} alt={name} className="image-fit"/>
-            <Link to={`/products/${_id}`} className="search-icon">
-                <BiSearch/>
-            </Link>
-        </div>
-        <div className="product-info">
-            <span className="fw-bold text-dark">{name}</span>
-            <span>{formatPrice(price)}</span>
-        </div>
+      <div className="image-container">
+        <img src={images[0]} alt={name} className="image-fit" />
+        {isDashboard && (
+          <Link to={`/dashboard/products/${_id}`} className="search-icon">
+            <BiSearch />
+          </Link>
+        )}
+      </div>
+      <div className="product-info">
+        <span className="fw-bold text-dark">{name}</span>
+        <span>{formatPrice(price)}</span>
+      </div>
     </Wrapper>
-  )
-}
+  );
+};
 export default GridItem;
 
 const Wrapper = styled.article`

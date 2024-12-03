@@ -5,6 +5,7 @@ import {
   getCurrentUserOrders,
   updateOrder,
   createOrder,
+  orderPaymentVerification,
 } from "../controllers/orderControllers.js";
 import {
   authenticateUser,
@@ -17,6 +18,7 @@ router
   .route("/")
   .get(authenticateUser, authorizePermission("admin", "owner"), getAllOrders)
   .post(authenticateUser, createOrder);
+router.route("/verifyPayment").post(orderPaymentVerification);
 router.route("/showAllMyOrders").get(authenticateUser, getCurrentUserOrders);
 router
   .route("/:id")

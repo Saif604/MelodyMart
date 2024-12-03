@@ -8,9 +8,10 @@ import styled from "styled-components";
 const ProductList = () => {
   const navigate = useNavigate();
   const { products, isGrid } = useSelector((state) => state.products);
-  if(products.length < 1){
-    return <p className="text-danger">Sorry, no product found</p>
+  if (products.length < 1) {
+    return <p className="text-danger">Sorry, no product found</p>;
   }
+  const isDashboard = window.location.pathname.split("/").includes("dashboard");
   return (
     <Row className="mb-3 g-3">
       {isGrid
@@ -34,12 +35,16 @@ const ProductList = () => {
                   {formatPrice(product.price)}
                 </span>
                 <p>{product.description}</p>
-                <button
-                  className="button mb-3"
-                  onClick={() => navigate(`/product/${product._id}`)}
-                >
-                  details
-                </button>
+                {isDashboard && (
+                  <button
+                    className="button mb-3"
+                    onClick={() =>
+                      navigate(`/dashboard/products/${product._id}`)
+                    }
+                  >
+                    details
+                  </button>
+                )}
               </Col>
             </ListItem>
           ))}
@@ -49,8 +54,8 @@ const ProductList = () => {
 export default ProductList;
 
 const ListItem = styled(Row)`
-  .image-container{
-    height:13rem;
+  .image-container {
+    height: 13rem;
     overflow: hidden;
   }
-`
+`;

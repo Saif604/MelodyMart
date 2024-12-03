@@ -65,7 +65,7 @@ const Products = () => {
 };
 export default Products;
 
-const Wrapper = styled.main`
+const Wrapper = styled.div`
   .cstm-row {
     min-height: calc(100vh - var(--nav-height));
     margin: 1rem 0;

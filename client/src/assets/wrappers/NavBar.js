@@ -24,17 +24,8 @@ const Wrapper = styled(Navbar)`
   .icon {
     font-size: 1.5rem;
   }
-
   .navbar-toggler {
     background: var(--light);
-  }
-  span {
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    gap: 0.25rem;
   }
 `;
 export default Wrapper;

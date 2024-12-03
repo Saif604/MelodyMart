@@ -1,3 +1,4 @@
 import ReviewModal from "./Review";
+import OrderModal from "./OrderModal";
 
-export {ReviewModal};
+export {ReviewModal,OrderModal};

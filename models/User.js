@@ -34,7 +34,14 @@ UserSchema.virtual("reviews",{
   localField:"_id",
   foreignField:"user",
   justOne:false
-})
+});
+
+UserSchema.virtual("orders",{
+  ref:"Order",
+  localField:"_id",
+  foreignField:"user",
+  justOne:false
+});
 
 UserSchema.pre("save",async function(){
     if(!this.isModified("password")) return;

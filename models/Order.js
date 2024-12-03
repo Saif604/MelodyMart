@@ -55,13 +55,13 @@ const OrderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    clientSecret: {
-      type: String,
+    orderSecrets: {
+      type: Object,
       required: true,
     },
-    paymentIntentId: {
-      type: String,
-    },
+    paymentId:{
+      type:String
+    }
   },
   { timestamps: true }
 );

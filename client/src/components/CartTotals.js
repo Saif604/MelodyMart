@@ -1,14 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-// import { useCartContext } from "../context/cart_context";
-// import { useUserContext } from "../context/user_context";
 import { formatPrice } from "../utils";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../features/Orders/ordersSlice";
 
 const CartTotals = () => {
-  const { totalAmount, shippingFee,tax } = useSelector((states)=>states.cart);
-//   const { myUser, loginWithRedirect } = useUserContext();
+  const { totalAmount, shippingFee, tax, cart } = useSelector(
+    (states) => states.cart
+  );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleCheckout = () => {
+    const orderDetails = { items: cart, tax, shippingFee };
+    dispatch(createOrder(orderDetails));
+    navigate("/dashboard/checkout");
+  };
   return (
     <Wrapper>
       <div>
@@ -24,18 +31,13 @@ const CartTotals = () => {
           </p>
           <hr />
           <h4>
-            order total : <span>{formatPrice(totalAmount + shippingFee + tax)}</span>
+            order total :
+            <span>{formatPrice(totalAmount + shippingFee + tax)}</span>
           </h4>
         </article>
-        {/* {myUser ? (
-          <Link to="/checkout" className="btn">
-            proceed to checkout
-          </Link>
-        ) : (
-          <button type="button" className="btn" onClick={loginWithRedirect}>
-            login
-          </button>
-        )} */}
+        <button className="button" onClick={handleCheckout}>
+          proceed to checkout
+        </button>
       </div>
     </Wrapper>
   );
@@ -61,13 +63,14 @@ const Wrapper = styled.section`
   h4 {
     margin-top: 1rem;
   }
-  h4,h5{
+  h4,
+  h5 {
     font-weight: 700;
   }
   @media (min-width: 776px) {
     justify-content: flex-end;
   }
-  .btn {
+  .button {
     width: 100%;
     margin-top: 1rem;
     text-align: center;

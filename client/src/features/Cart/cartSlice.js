@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import { logoutUser } from "../Authenticate/authSlice";
 
 const getLocalStorage = () =>{
     let cart = localStorage.getItem("cart");
@@ -18,7 +19,7 @@ const cartSlice = createSlice({
     initialState,
     reducers:{
         addToCart:(state,action)=>{
-           const { id, color, amount, name,images,price,inventory } = action.payload;
+           const { id, color, amount, name,images,price,inventory,product } = action.payload;
            const tempItem = state.cart.find((i) => i.id === id + color);
            if (tempItem) {
              const tempCart = state.cart.map((cartItem) => {
@@ -42,6 +43,7 @@ const cartSlice = createSlice({
                image: images[0],
                price: price,
                max: inventory,
+               product
              };
              state.cart = [...state.cart,newItem];
            }
@@ -86,6 +88,11 @@ const cartSlice = createSlice({
           );
           return { ...state, totalItems, totalAmount };
         }
+    },
+    extraReducers:(builder)=>{
+      builder.addCase(logoutUser.fulfilled,(state)=>{
+        state.cart = []
+      });
     }
 });
 

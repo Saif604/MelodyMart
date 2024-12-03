@@ -3,24 +3,22 @@ import Product from "../models/Product.js";
 import { StatusCodes } from "http-status-codes";
 import { checkPermissions } from "../utils/index.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
-import Stripe from "stripe";
-// const fakeStripAPI = async ({ amount, currency }) => {
-//   const client_secret = "someRandomValue";
-//   return { client_secret, amount };
-// };
-const createOrder = async (req, res) => {
-  const { items: cartItems, tax, shippingFee} = req.body;
+import { instance } from "../app.js";
+import crypto from "crypto";
 
+const createOrder = async (req, res) => {
+  const { items: cartItems, tax, shippingFee } = req.body;
   if (!cartItems || cartItems.length < 1) {
     throw new BadRequestError("No cart Item Provided");
   }
+  
   if (!tax || !shippingFee) {
     throw new BadRequestError("Please provide tax and shipping fee");
   }
   let orderItems = [];
   let subtotal = 0;
   for (const item of cartItems) {
-    if(!item.color){
+    if (!item.color) {
       throw new BadRequestError("Please provide color of item");
     }
     const dbProduct = await Product.findOne({ _id: item.product });
@@ -28,46 +26,96 @@ const createOrder = async (req, res) => {
       throw new NotFoundError(`No product with id: ${item.product}`);
     }
     const { name, price, images, _id, colors } = dbProduct;
-    if(!colors.includes(item.color)){
+    if (!colors.includes(item.color)) {
       throw new BadRequestError("Provided color is not availabe");
     }
     const singleOrderItem = {
       amount: item.amount,
       name,
       price,
-      image:images[0],
+      image: images[0],
       product: _id,
-      color:item.color
+      color: item.color,
     };
     //add items to order
     orderItems = [...orderItems, singleOrderItem];
     subtotal += item.amount * price;
   }
   const total = subtotal + shippingFee + tax;
-  //get client secret
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-  const paymentIntent = await stripe.paymentIntents.create({
+  const options = {
     amount: total,
-    currency: "inr",
-    payment_method_types: ["card"],
-  });
+    currency: "INR",
+  };
+  const orderSecrets = await instance.orders.create(options);
   const order = await Order.create({
     orderItems,
     total,
     subtotal,
     tax,
     shippingFee,
-    clientSecret: paymentIntent.client_secret,
     user: req.user.userId,
+    orderSecrets,
   });
-  res
-    .status(StatusCodes.CREATED)
-    .json({ order});
+  res.status(StatusCodes.CREATED).json({ order });
 };
 
 const getAllOrders = async (req, res) => {
-  const orders = await Order.find({});
+  const orders = await Order.find({}).populate({
+    path: "user",
+    select: "name email",
+  });
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
+};
+
+const orderPaymentVerification = async (req, res) => {
+  const { orderId, razorpayPaymentId, razorpayOrderId, razorpaySignature } =
+    req.body;
+    console.log("1")
+  if (
+    !orderId ||
+    !razorpayPaymentId ||
+    !razorpayOrderId ||
+    !razorpaySignature
+  ) {
+    throw new BadRequestError("Please provide id and signature");
+  }
+  console.log("2")
+
+  const order = await Order.findOne({ _id: orderId });
+  if (!order) {
+    throw new NotFoundError(`No order exist with id: ${orderId}`);
+  }
+  console.log("3")
+  if (order.status === "paid") {
+    throw new BadRequestError("Order already placed");
+  }
+  console.log("4")
+  const secret = process.env.RAZORPAY_API_SECRET;
+
+  // const shasum = crypto.createHmac("sha256", );
+  const shasum = crypto.createHmac("sha256", secret);
+
+  shasum.update(`${razorpayOrderId}|${razorpayPaymentId}`);
+
+  const digest = shasum.digest("hex");
+
+  // comaparing our digest with the actual signature
+  if (digest !== razorpaySignature) {
+    order.status = "failed";
+    await order.save();
+    throw new BadRequestError("Transaction not legit");
+  } 
+  console.log("5")
+
+  order.paymentId = razorpayPaymentId;
+  order.status = "paid";
+  await order.save();
+  console.log("6")
+
+  res.status(StatusCodes.CREATED).json({
+    success: true,
+    msg: "Payment successful",
+  });
 };
 
 const getSingleOrder = async (req, res) => {
@@ -82,13 +130,13 @@ const getSingleOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   const { id: orderID } = req.params;
-  const { paymentIntentId } = req.body;
+  const { paymentId } = req.body;
   const order = await Order.findOne({ _id: orderID });
   if (!order) {
     throw new NotFoundError(`No order with id: ${orderID}`);
   }
   checkPermissions(req.user, order.user);
-  order.paymentIntentId = paymentIntentId;
+  order.paymentId = paymentId;
   order.status = "paid";
   await order.save();
   res.status(StatusCodes.OK).json({ order });
@@ -106,4 +154,5 @@ export {
   getCurrentUserOrders,
   createOrder,
   updateOrder,
+  orderPaymentVerification,
 };

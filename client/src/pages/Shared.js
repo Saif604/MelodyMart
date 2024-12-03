@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 import { Outlet } from "react-router-dom";
-import { BigSidebar, Navbar, SmallSidebar } from "../../components"
+import { BigSidebar, Navbar, SmallSidebar } from "../components";
 const SharedLayout = () => {
   return (
     <Wrapper>
@@ -18,7 +18,6 @@ const SharedLayout = () => {
   );
 };
 export default SharedLayout;
-
 
 const Wrapper = styled.section`
   .dashboard {
@@ -38,4 +37,4 @@ const Wrapper = styled.section`
       width: 90%;
     }
   }
-`
+`;

@@ -6,11 +6,17 @@ import fileUpload from "express-fileupload";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
+import Razorpay from "razorpay";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
+});
+
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
 import authRouter from "./routes/authRouters.js";
@@ -32,14 +38,12 @@ server.use(cookieParser(process.env.COOKIE_SECRET));
 server.use(express.json());
 server.use(fileUpload({useTempFiles:true}));
 
-server.get("/api/v1", (req, res) => {
-  res.status(200).json({ msg: "Hello" });
-});
 server.use("/api/v1/auth", authRouter);
 server.use("/api/v1/users", userRouter);
 server.use("/api/v1/products", productRouter);
 server.use("/api/v1/reviews", reviewRouter);
 server.use("/api/v1/orders", orderRouter);
+
 
 server.use(notFoundMiddleware);
 server.use(errorHandlerMiddleware);

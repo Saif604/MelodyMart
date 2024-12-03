@@ -1,23 +1,15 @@
 import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
-import { BiLogInCircle, BiCart, BiLogOutCircle } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import Wrapper from "../assets/wrappers/NavBar.js";
 import { useState } from "react";
-import { logoutUser } from "../features/Authenticate/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import AuthBtn from "./AuthBtn.js";
 
 const NavBar = () => {
   const [show, setShow] = useState(false);
-  const dispatch = useDispatch();
   const showCanvas = () => setShow(true);
   const hideCanvas = () => setShow(false);
   const { user } = useSelector((state) => state.auth);
-  const { totalItems } = useSelector((state) => state.cart);
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
 
   return (
     <Wrapper expand={"md"} sticky="top">
@@ -55,21 +47,7 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </Nav>
-            <Nav className="cstm-navbar-nav">
-              <Nav.Link
-                as={NavLink}
-                to="/cart"
-                className="cart"
-                onClick={hideCanvas}
-              >
-                <BiCart className="icon" />
-                <span className="cart-count">{totalItems}</span>
-              </Nav.Link>
-              {/* {
-                !user ? (<Nav.Link as={NavLink} to="/login" onClick={hideCanvas}>
-                Login <BiLogInCircle className="icon" />
-              </Nav.Link>):(<span onClick={handleLogout}>Logout <BiLogOutCircle className="icon"/></span>)
-              } */}
+            <Nav>
               <AuthBtn hideCanvas={hideCanvas} />
             </Nav>
           </Offcanvas.Body>
