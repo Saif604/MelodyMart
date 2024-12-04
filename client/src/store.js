@@ -5,6 +5,7 @@ import authReducer from "./features/Authenticate/authSlice.js";
 import modalReducer from "./features/Modal/modalSlice.js";
 import ordersReducer from "./features/Orders/ordersSlice.js";
 import cartReducer from "./features/Cart/cartSlice.js";
+import reviewReducer from "./features/Review/reviewSlice.js";
 
 export const store = configureStore({
     reducer:{
@@ -14,6 +15,7 @@ export const store = configureStore({
         modal:modalReducer,
         cart:cartReducer,
         orders:ordersReducer,
+        reviews:reviewReducer
     }
 })
 export default store;

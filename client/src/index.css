@@ -77,18 +77,20 @@ ul{
 
 h1,h2,h3,h4,h5{
   font-family: var(--ff-1);
-  letter-spacing: var(--spacing);
   line-height: 1.25;
   margin-bottom: 0.75rem;
 }
 h1{
   font-size: 2.5rem;
+  letter-spacing: var(--spacing);
 }
 h2{
   font-size: 2rem;
+  letter-spacing: var(--spacing);
 }
 h3{
   font-size: 1.5rem;
+  letter-spacing: var(--spacing);
 }
 h4{
   font-size: 1.25rem;

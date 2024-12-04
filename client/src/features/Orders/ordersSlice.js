@@ -45,6 +45,7 @@ const orderSlice = createSlice({
     setCheckoutOrder: (state,action) => {
       state.orderCheckout = action.payload;
     },
+    clearAllOrders:(state) => initialState
   },
   extraReducers: (builder) => {
     builder
@@ -99,5 +100,5 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setCheckoutOrder } = orderSlice.actions;
+export const { setCheckoutOrder,clearAllOrders } = orderSlice.actions;
 export default orderSlice.reducer;

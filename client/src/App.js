@@ -1,6 +1,5 @@
 import { Home, Products, Logger, Cart,SingleProduct, Orders,Reviews,Profile,Shared,Error} from "./pages";
 import { SharedLayout,Protected,Login,Register, Checkout } from "./components";
-import {ReviewModal,OrderModal} from "./components/Modals";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,11 +23,9 @@ const App = () => {
           <Route index element={<Profile />} />
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<SingleProduct />} />
-          <Route path="products/:id" element={<ReviewModal />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="orders" element={<Orders />} />
-          <Route path="orders" element={<OrderModal />} />
           <Route path="reviews" element={<Reviews />} />
         </Route>
         <Route

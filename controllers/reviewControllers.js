@@ -76,6 +76,10 @@ const getSingleProductReviews = async (req, res) => {
   res.status(StatusCodes.OK).json({ reviews, count: reviews.length });
 };
 
+const getCurrentUserReviews = async(req,res) => {
+  const reviews = await Review.find({user:req.user.userId}).populate({path:"product",select:"images"});
+  res.status(StatusCodes.OK).json({reviews,count:reviews.length});
+}
 export {
   createReview,
   getAllReviews,
@@ -83,4 +87,5 @@ export {
   updateReview,
   deleteReview,
   getSingleProductReviews,
+  getCurrentUserReviews
 };

@@ -47,7 +47,8 @@ const productsSlice = createSlice({
       state.filters = {...initialFilters};
       state.sort = "price";
       state.page = 1;
-    }
+    },
+    clearAllProductStates:(state)=>initialState
   },
   extraReducers: (builder) => {
     builder
@@ -68,5 +69,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const {setView,updateFilters,clearFilters,updateSort,updatePage} = productsSlice.actions;
+export const {setView,updateFilters,clearFilters,updateSort,updatePage,clearAllProductStates} = productsSlice.actions;
 export default productsSlice.reducer;
