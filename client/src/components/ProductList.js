@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { GridItem } from "./index";
 import { useSelector } from "react-redux";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const ProductList = () => {

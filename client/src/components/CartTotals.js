@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../features/Orders/ordersSlice";

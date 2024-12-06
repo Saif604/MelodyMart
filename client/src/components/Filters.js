@@ -2,7 +2,7 @@ import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFilters,clearFilters } from "../features/AllProducts/productsSlice";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 import { useMemo, useState } from "react";
 const COMPANIES = [
   { _id: 1, name: "All", value: "" },

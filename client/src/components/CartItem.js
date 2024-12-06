@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 import AmountButtons from "./AmountButtons";
 import { FaTrash } from "react-icons/fa";
 import { toggleAmount, removeItem } from "../features/Cart/cartSlice";

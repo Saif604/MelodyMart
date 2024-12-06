@@ -1,6 +1,6 @@
 import { BiSearch } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 import styled from "styled-components";
 
 const GridItem = (props) => {

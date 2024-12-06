@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getSingleProduct, getSingleProductReviews } from "../features/Product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AddToCart, ProductImages, Stars } from "../components";
-import { formatPrice } from "../utils";
+import { formatPrice } from "../utils/format";
 
 const SingleProduct = () => {
   const { id } = useParams();
