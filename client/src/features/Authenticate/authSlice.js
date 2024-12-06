@@ -10,6 +10,7 @@ import {
   logoutUserThunk,
   registerUserThunk,
 } from "./authThunk";
+import { updateUser } from "../Profile/profileSlice";
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -21,19 +22,19 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", logoutUserThunk);
 const initialState = {
   user: getUserFromLocalStorage(),
   isLoading: false,
-  isSidebarOpen:false
+  isSidebarOpen: false,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers:{
-    toggleSidebar:(state)=>{
+  reducers: {
+    toggleSidebar: (state) => {
       state.isSidebarOpen = !state.isSidebarOpen;
     },
-    clearStore:(state)=>{
-      console.log("clearStore")
-    }
+    clearStore: (state) => {
+      console.log("clearStore");
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -50,8 +51,7 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         toast.error(action.payload);
-      });
-    builder
+      })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -65,13 +65,12 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         toast.error(action.payload);
-      });
-    builder
+      })
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        const {payload} = action;
+        const { payload } = action;
         state.user = payload.user;
         state.isLoading = false;
         removeUserFromLocalStorage();
@@ -80,10 +79,16 @@ const authSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
         toast.error(action.payload);
-      });
+      })
+      .addCase(updateUser.fulfilled,(state,action)=>{
+        const {user} = action.payload;
+        state.user = user;
+        addUserToLocalStorage(user);
+        state.isLoading = false;
+      })
   },
 });
 
-export const {toggleSidebar,clearStore} = authSlice.actions;
+export const { toggleSidebar, clearStore } = authSlice.actions;
 
 export default authSlice.reducer;

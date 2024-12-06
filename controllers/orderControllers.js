@@ -143,7 +143,7 @@ const updateOrder = async (req, res) => {
 };
 
 const getCurrentUserOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user.userId });
+  const orders = await Order.find({ user: req.user.userId }).populate("orderItems.product");
 
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };

@@ -29,6 +29,10 @@ import AuthBtn from "./AuthBtn";
 import Checkout from "./Checkout";
 import DataTable from "./DataTable";
 import ReviewCard from "./ReviewCard";
+import LineChart from "./LineChart";
+import BarChart from "./BarChart";
+import ProfileWizard from "./ProfileWizard";
+import DonutChart from "./DonutChart";
 
 export {
   Logo,
@@ -61,5 +65,9 @@ export {
   AuthBtn,
   Checkout,
   DataTable,
-  ReviewCard
+  ReviewCard,
+  ProfileWizard,
+  BarChart,
+  LineChart,
+  DonutChart
 };

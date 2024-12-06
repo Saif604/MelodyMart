@@ -31,7 +31,7 @@ const updateUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
   user.email = email;
   user.name = name;
-  user.save();
+  await user.save();
   const tokenUser = createTokenUser(user);
   attachCookieToResponse(res,tokenUser);
   res.status(StatusCodes.OK).json({ user: tokenUser });

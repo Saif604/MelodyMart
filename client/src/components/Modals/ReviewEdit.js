@@ -3,7 +3,6 @@ import { closeModal } from "../../features/Modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Form } from "react-bootstrap";
 import { useState,useEffect } from "react";
-import { updateReview } from "../../features/Review/reviewSlice";
 
 const ReviewEdit = ({handleUpdate}) => {
   const dispatch = useDispatch();

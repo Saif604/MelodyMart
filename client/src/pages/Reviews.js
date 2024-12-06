@@ -36,7 +36,9 @@ const Reviews = () => {
 
   if (isLoading) {
     return (
-      <Spinner/>
+      <div className="page flx-cntr">
+        <Spinner animation="grow" className="loadder" />
+      </div>
     );
   }
   if (isError) {
