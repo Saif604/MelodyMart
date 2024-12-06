@@ -1,15 +1,7 @@
 import styled from "styled-components";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
-import { ReviewModal } from "./Modals";
-import { openModal } from "../features/Modal/modalSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 const Stars = ({ ratings,reviews}) => {
-  const dispatch = useDispatch();
-  const {reviews:productReviews,totalReviews} = useSelector((states)=>states.product);
-  const handleOpen = () =>{
-    dispatch(openModal({reviews:productReviews,totalReviews}));
-  }
   const newStars = Array.from({ length: 5 }, (_, index) => {
     const number = index + 0.5;
     return ratings >= index + 1 ? (
@@ -27,10 +19,7 @@ const Stars = ({ ratings,reviews}) => {
           <span key={index}>{star}</span>
         ))}
       </div>
-      <p className="reviews" onClick={handleOpen}>
-        ({reviews} customer reviews)
-      </p>
-      <ReviewModal/>
+      <p>{reviews} customer reviews</p>
     </Wrapper>
   );
 };

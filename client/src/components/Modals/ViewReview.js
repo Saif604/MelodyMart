@@ -3,7 +3,7 @@ import { closeModal } from "../../features/Modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-const Review = () => {
+const ViewReview = () => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((states) => states.modal);
   const { totalReviews, reviews } = modalData;
@@ -42,7 +42,7 @@ const Review = () => {
   );
 };
 
-export default Review;
+export default ViewReview;
 
 const Wrapper = styled.div`
   .review-count {

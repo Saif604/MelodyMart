@@ -33,6 +33,7 @@ import LineChart from "./LineChart";
 import BarChart from "./BarChart";
 import ProfileWizard from "./ProfileWizard";
 import DonutChart from "./DonutChart";
+import ProductContent from "./ProductContent";
 
 export {
   Logo,
@@ -69,5 +70,6 @@ export {
   ProfileWizard,
   BarChart,
   LineChart,
-  DonutChart
+  DonutChart,
+  ProductContent
 };

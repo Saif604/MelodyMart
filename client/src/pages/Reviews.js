@@ -1,6 +1,6 @@
 import { ReviewCard } from "../components";
 import { Row, Col } from "react-bootstrap";
-import { ReviewEdit } from "../components/Modals";
+import { ReviewModal } from "../components/Modals";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { deleteReview, getCurrentUserReviews, updateReview } from "../features/Review/reviewSlice";
@@ -62,7 +62,7 @@ const Reviews = () => {
         ))}
       </Row>
       {
-        show && (<ReviewEdit handleUpdate={handleUpdate}/>)
+        show && (<ReviewModal handleUpdate={handleUpdate} title={"Edit Review"}/>)
       }
       
     </div>

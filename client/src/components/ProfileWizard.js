@@ -51,9 +51,11 @@ const Wrapper = styled.div`
     margin-bottom: 0.5rem;
     .title {
       font-weight: 700;
+      text-transform: capitalize;
     }
     .text {
       color: var(--gray-700);
+      text-transform: capitalize;
     }
   }
   .btn-container {

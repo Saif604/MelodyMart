@@ -5,7 +5,7 @@ import {BadRequestError,NotFoundError} from "../errors/index.js";
 import { checkPermissions } from "../utils/index.js";
 
 const createReview = async (req, res) => {
-  const { product: productID } = req.body;
+  const { product: productID} = req.body;
   const isValidProduct = await Product.findOne({ _id: productID });
   if (!isValidProduct) {
     throw new NotFoundError(`No product with id: ${productID}`);

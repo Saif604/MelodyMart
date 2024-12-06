@@ -4,9 +4,10 @@ import {
 } from "./productThunk.js";
 import { toast } from "react-toastify";
 
-import { getSingleProductReviewsThunk } from "../Review/reviewThunk.js";
+import { getSingleProductReviewsThunk,createReviewThunk } from "../Review/reviewThunk.js";
 
 export const getSingleProductReviews = createAsyncThunk("product/getSingleProductReviews",getSingleProductReviewsThunk);
+export const createReview = createAsyncThunk("product/createReview",createReviewThunk);
 
 export const getSingleProduct = createAsyncThunk(
   "product/getSingleProduct",
@@ -38,8 +39,7 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         console.log(action.payload);
-      });
-    builder
+      })
       .addCase(getSingleProductReviews.pending, (state) => {
         state.isLoading = true;
       })
@@ -52,7 +52,13 @@ const productSlice = createSlice({
       .addCase(getSingleProductReviews.rejected, (state, action) => {
         state.isLoading = false;
         toast.error(action.payload);
-      });
+      })
+      .addCase(createReview.fulfilled,(_,action)=>{
+        toast.success("Review added successfully...");
+      })
+      .addCase(createReview.rejected,(_,action)=>{
+        toast.error(action.payload);
+      })
   },
 });
 export const {} = productSlice.actions;

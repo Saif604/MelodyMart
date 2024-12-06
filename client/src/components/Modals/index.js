@@ -1,6 +1,6 @@
-import ReviewModal from "./Review";
+import ViewReview from "./ViewReview";
 import OrderModal from "./OrderModal";
-import ReviewEdit from "./ReviewEdit";
+import ReviewModal from "./ReviewModal";
 import EditUser from "./EditUser";
 
-export {ReviewModal,OrderModal, ReviewEdit,EditUser};
+export {ViewReview,OrderModal, ReviewModal,EditUser};
