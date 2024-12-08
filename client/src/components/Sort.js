@@ -1,7 +1,7 @@
 import { BsGridFill, BsList } from "react-icons/bs";
 import { Row, Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setView,updateSort } from "../features/AllProducts/productsSlice";
+import { setView,updateSort } from "../features/Products/productsSlice";
 
 const Sort = () => {
   const dispatch = useDispatch();

@@ -34,6 +34,11 @@ import BarChart from "./BarChart";
 import ProfileWizard from "./ProfileWizard";
 import DonutChart from "./DonutChart";
 import ProductContent from "./ProductContent";
+import RoleProtected from "./RoleProtected";
+import TextEnter from "./TextEnter";
+import SelectInput from "./SelectInput";
+import FileUpload from "./FileUpload";
+import ProductForm from "./ProductForm";
 
 export {
   Logo,
@@ -71,5 +76,10 @@ export {
   BarChart,
   LineChart,
   DonutChart,
-  ProductContent
+  ProductContent,
+  RoleProtected,
+  TextEnter,
+  SelectInput,
+  FileUpload,
+  ProductForm
 };

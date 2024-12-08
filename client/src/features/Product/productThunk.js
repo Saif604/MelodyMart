@@ -18,4 +18,14 @@ const createReviewThunk = async(reviewData,thunkAPI) =>{
     return rejectWithValue(error.response.data.msg);
   }
 }
-export { getSingleProductThunk,createReviewThunk};
+const getSingleProductReviewsThunk = async(productId,thunkAPI) =>{
+  const {dispatch,rejectWithValue} = thunkAPI;
+  try{
+    const {data} = await axios.get(`/api/v1/products/${productId}/reviews`)
+    return data;
+  }
+  catch(error){
+    return rejectWithValue(error.response.data.msg);
+  }
+}
+export { getSingleProductThunk,createReviewThunk,getSingleProductReviewsThunk};

@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {getAllOrdersThunk,createOrderThunk,verifyPaymentThunk, getCurrentUserOrdersThunk} from "./ordersThunk";
+import {createOrderThunk,verifyPaymentThunk, getCurrentUserOrdersThunk} from "./ordersThunk";
 import { toast } from "react-toastify";
 import {formatDate,formatPrice} from "../../utils/format";
 
-export const getAllOrders = createAsyncThunk(
-  "orders/getAllOrders",
-  getAllOrdersThunk
-);
 export const getCurrentUserOrders = createAsyncThunk(
   "orders/getCurrentUserOrders",
   getCurrentUserOrdersThunk
@@ -22,11 +18,9 @@ export const verifyPayment = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
-  orders: [],
   currentUserOrders: [],
   totalCurrentUserOrder: 0,
   orderCheckout: null,
-  totalOrders: 0,
   isError: false,
   tableColumns: [
     { field: "_id", label: "Order ID" },
@@ -49,20 +43,6 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllOrders.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getAllOrders.fulfilled, (state, action) => {
-        const { orders, count } = action.payload;
-        state.orders = orders;
-        state.totalOrders = count;
-        state.isLoading = false;
-      })
-      .addCase(getAllOrders.rejected, (state, action) => {
-        state.isError = true;
-        toast.error(action.payload);
-        state.isLoading = false;
-      })
       .addCase(getCurrentUserOrders.pending, (state) => {
         state.isLoading = true;
       })

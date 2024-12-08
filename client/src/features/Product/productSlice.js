@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getSingleProductThunk,
-} from "./productThunk.js";
 import { toast } from "react-toastify";
 
-import { getSingleProductReviewsThunk,createReviewThunk } from "../Review/reviewThunk.js";
+import { createReviewThunk,getSingleProductThunk,getSingleProductReviewsThunk } from "./productThunk.js";
 
 export const getSingleProductReviews = createAsyncThunk("product/getSingleProductReviews",getSingleProductReviewsThunk);
 export const createReview = createAsyncThunk("product/createReview",createReviewThunk);

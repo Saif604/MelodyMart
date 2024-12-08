@@ -42,7 +42,7 @@ const DataTable = ({ columns, data }) => {
           {sortedData.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((col, colIndex) => {
-                if (col.field === "images") {
+                if (col.field === "image") {
                   return (
                     <td key={colIndex}>
                       <img src={row[col.field]} alt="img" className="table-img"/>

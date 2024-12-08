@@ -1,22 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import {
-  createReviewThunk,
-  getAllReviewsThunk,
-  getSingleReviewThunk,
   updateReviewThunk,
   deleteReviewThunk,
   getCurrentUserReviewsThunk,
 } from "./reviewThunk";
 
-export const createReview = createAsyncThunk(
-  "reviews/createReview",
-  createReviewThunk
-);
-export const getAllReviews = createAsyncThunk(
-  "reviews/getAllReviews",
-  getAllReviewsThunk
-);
 export const getCurrentUserReviews = createAsyncThunk(
   "reviews/getCurrentUserReviews",
   getCurrentUserReviewsThunk
@@ -28,10 +17,6 @@ export const deleteReview = createAsyncThunk(
 export const updateReview = createAsyncThunk(
   "reviews/updateReview",
   updateReviewThunk
-);
-export const getSingleReview = createAsyncThunk(
-  "reviews/getSingleReview",
-  getSingleReviewThunk
 );
 
 const initialState = {

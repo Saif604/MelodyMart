@@ -16,7 +16,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(authenticateUser, authorizePermission("admin", "owner"), getAllOrders)
+  .get(authenticateUser, authorizePermission("admin"), getAllOrders)
   .post(authenticateUser, createOrder);
 router.route("/verifyPayment").post(orderPaymentVerification);
 router.route("/showAllMyOrders").get(authenticateUser, getCurrentUserOrders);

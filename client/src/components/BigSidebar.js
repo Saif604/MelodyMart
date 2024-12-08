@@ -2,11 +2,10 @@ import NavLinks from "./NavLinks";
 import Logo from "../components/Logo";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const BigSidebar = () => {
   const { isSidebarOpen } = useSelector((store) => store.auth);
-  const navigate = useNavigate();
 
   return (
     <Wrapper>

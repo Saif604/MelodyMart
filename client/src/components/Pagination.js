@@ -1,7 +1,7 @@
 import React from "react";
 import { Pagination as BsPagination, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePage } from "../features/AllProducts/productsSlice";
+import { updatePage } from "../features/Products/productsSlice";
 const Pagination = () => {
   const dispatch = useDispatch();
   const { pages,page } = useSelector((state) => state.products);

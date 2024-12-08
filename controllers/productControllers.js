@@ -5,23 +5,23 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
 const createProduct = async (req, res) => {
-  if (!req.files || !req.files.image) {
+  if (!req.files || !req.files.images) {
     throw new BadRequestError("No file uploaded");
   }
 
-  const { image } = req.files;
+  const { images } = req.files;
 
   // Ensure the images are in an array format
-  const images = Array.isArray(image) ? image : [image];
+  const imagesArr = Array.isArray(images) ? images : [images];
 
   // Limit the number of images to 5
-  if (images.length > 5) {
+  if (imagesArr.length > 5) {
     throw new BadRequestError("You can upload up to 5 images");
   }
 
   const urls = []; // Array to store Cloudinary URLs
 
-  for (const img of images) {
+  for (const img of imagesArr) {
     // Validate each image
     if (!img.mimetype.startsWith("image")) {
       throw new BadRequestError("Please upload only images");

@@ -6,6 +6,7 @@ const StyledModal = styled(Modal)`
     position: fixed;
     right: 0;
     top:var(--nav-height);
+    top:0;
     margin: 0;
     height: 100%;
     min-width: 520px;
@@ -18,7 +19,7 @@ const StyledModal = styled(Modal)`
   }
 
   .modal-content {
-    height: 92%;
+    height: 100%;
     border-radius: 0;
     overflow-y: auto;
   }

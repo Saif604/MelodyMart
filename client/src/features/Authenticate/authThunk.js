@@ -1,6 +1,6 @@
 import axios from "axios";
 import { clearAllReviews } from "../Review/reviewSlice";
-import { clearAllProductStates } from "../AllProducts/productsSlice";
+import { clearAllProductStates } from "../Products/productsSlice";
 import { clearAllOrders } from "../Orders/ordersSlice";
 const registerUserThunk = async(userData,thunkAPI)=>{
   const {rejectWithValue} = thunkAPI;

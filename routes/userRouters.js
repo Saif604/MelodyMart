@@ -12,7 +12,7 @@ import {
 import express from "express";
 const router = express.Router();
 
-const middleware = [authenticateUser,authorizePermission("admin","owner")];
+const middleware = [authenticateUser,authorizePermission("admin")];
 
 router
   .route("/")

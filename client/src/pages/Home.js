@@ -4,7 +4,7 @@ import HeroImg from "../assets/images/hero.svg";
 import { GridItem } from "../components/index.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllProducts } from "../features/AllProducts/productsSlice.js";
+import { getAllProducts } from "../features/Products/productsSlice.js";
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
