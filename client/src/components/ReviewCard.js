@@ -19,7 +19,7 @@ const ReviewCard = ({ review, sno, onEdit, onDelete }) => {
       <hr />
       <div className="review-details">
         <div className="image-container mb-1">
-          <img src={images[0]} alt="prod-img" className="image-fit" />
+          <img src={images[0].url} alt="prod-img" className="image-fit" />
         </div>
         <h5>
           Review Id: <span className="ms-2 text-muted">{reviewId}</span>

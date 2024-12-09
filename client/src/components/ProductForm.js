@@ -55,7 +55,7 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
     freeShipping: initialData?.freeShipping ?? true,
     inventory: initialData?.inventory ?? 0,
     colors: initialData?.colors ?? [],
-    images: initialData?.images ?? [],
+    images: initialData?.images?.map(({url})=>url) ?? [],
   };
 
   const ValidationSchema = Yup.object().shape({
@@ -73,23 +73,8 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
       .min(1, "At least one color is required")
       .max(5, "You can add up to 5 colors only")
       .required("Colors are required"),
+    description:Yup.string().required("Product description is required"),
     images: Yup.array()
-      .of(
-        Yup.mixed()
-          .required("An image file is required.")
-          .test(
-            "fileType",
-            "Only image files are allowed.",
-            (file) =>
-              file &&
-              ["image/jpeg", "image/png", "image/gif"].includes(file.type)
-          )
-          .test(
-            "fileSize",
-            "File size should be less than 5MB.",
-            (file) => file && file.size <= 5 * 1024 * 1024
-          )
-      )
       .required("You must upload exactly 5 images.")
       .length(5, "You must upload exactly 5 images."),
   });
@@ -103,7 +88,7 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
           action.resetForm();
         }}
       >
-        {({ values, handleBlur }) => (
+        {({ values, handleBlur,isSubmitting }) => (
           <Form>
             <h3>{title}</h3>
             <hr />
@@ -176,13 +161,13 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
                     as={BsForm.Check}
                     name="featured"
                     label="Featured"
-                    value={values.featured}
+                    checked={values.featured}
                   />
                   <Field
                     as={BsForm.Check}
                     name="freeShipping"
                     label="Shipping"
-                    value={values.freeShipping}
+                    checked={values.freeShipping}
                   />
                 </div>
               </Col>
@@ -190,40 +175,44 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
                 <BsForm.Group controlId="form-colors">
                   <BsForm.Label>Colors</BsForm.Label>
                   <Row>
-                    <Col sm={6} md={3} lg={2}>
+                    <Col sm={6} md={3}>
                       <Field
                         as={BsForm.Check}
                         label="#191970"
                         name="colors"
                         id="colors"
                         value="#191970"
+                        checked={values.colors.includes("#191970")}
                       />
                     </Col>
-                    <Col sm={6} md={3} lg={2}>
+                    <Col sm={6} md={3}>
                       <Field
                         as={BsForm.Check}
                         label="#50C878"
                         value="#50C878"
                         name="colors"
                         id="colors"
+                        checked={values.colors.includes("#50C878")}
                       />
                     </Col>
-                    <Col sm={6} md={3} lg={2}>
+                    <Col sm={6} md={3}>
                       <Field
                         as={BsForm.Check}
                         label="#FF4500"
                         value="#FF4500"
                         name="colors"
                         id="colors"
+                        checked={values.colors.includes("#FF4500")}
                       />
                     </Col>
-                    <Col sm={6} md={3} lg={2}>
+                    <Col sm={6} md={3}>
                       <Field
                         as={BsForm.Check}
                         label="#B76E79"
                         value="#B76E79"
                         name="colors"
                         id="colors"
+                        checked={values.colors.includes("#B76E79")}
                       />
                     </Col>
                   </Row>
@@ -243,19 +232,22 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
                 </BsForm.Group>
               </Col>
             </Row>
-            {
-              isLoading ? (<Button variant="primary" className="button" disabled>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-              <span>Loading...</span>
-            </Button>) : (<Button type="submit" className="button">Submit</Button>)
-            }
-            
+            {isLoading || isSubmitting ? (
+              <button variant="primary" className="button" disabled>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span>Loading...</span>
+              </button>
+            ) : (
+              <button type="submit" className="button">
+                Submit
+              </button>
+            )}
           </Form>
         )}
       </Formik>

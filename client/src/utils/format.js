@@ -18,7 +18,6 @@ export const formatDate = (dateString) => {
   return formattedDate.replace(", ", " ");
 };
 
-
 //DATE FORMAT
 export const formatPrice = (number) => {
   const newNumber = Intl.NumberFormat("en-US", {
@@ -27,7 +26,6 @@ export const formatPrice = (number) => {
   }).format(number / 100);
   return newNumber;
 };
-
 
 export const formatDonut = (data) => {
   // Step 1: Calculate the total price for each company
@@ -58,23 +56,23 @@ export const formatDonut = (data) => {
   }));
 };
 
-export const formatLine = (data) =>{
+export const formatLine = (data) => {
   const result = Object.values(
     data.reduce((acc, item) => {
       const date = new Date(item.createdAt);
-      const month = date.toLocaleString("default", { month: "short" }); 
+      const month = date.toLocaleString("default", { month: "short" });
 
       if (!acc[month]) {
         acc[month] = { label: month, value: 0 };
       }
-      acc[month].value += item.total / 100; 
+      acc[month].value += item.total / 100;
       return acc;
     }, {})
   );
   return result;
-}
+};
 
-export const formatBar = (data) =>{
+export const formatBar = (data) => {
   const result = Object.values(
     data.reduce((acc, item) => {
       const date = new Date(item.createdAt);
@@ -88,4 +86,6 @@ export const formatBar = (data) =>{
     }, {})
   );
   return result;
-}
+};
+
+

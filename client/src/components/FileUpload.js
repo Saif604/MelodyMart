@@ -1,132 +1,157 @@
-import React, { useState } from "react";
-import { Form } from "react-bootstrap";
-import { FaFileUpload } from "react-icons/fa";
+import { useState,useEffect } from "react";
 import styled from "styled-components";
+import { FcRemoveImage } from "react-icons/fc";
+import { FaRegFileImage } from "react-icons/fa";
 
-const HiddenFileInput = styled.input`
-  display: none;
-`;
+const FileUpload = ({ form, field }) => {
+  const [previews, setPreviews] = useState([...form.values[field.name]] || []);
 
-const FileUpload = ({
-  field,
-  form,
-  label,
-  multiple,
-  maxFiles = 5,
-  ...props
-}) => {
-  const [previews, setPreviews] = useState([...(form.values.images ?? null)]);
-  // Handle file changes
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-
+  const handleFileChange = (event) => {
+    const selectedFiles = Array.from(event.target.files);
     const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
     setPreviews(filePreviews);
-
-    form.setFieldTouched(field.name, true);
-    form.setFieldValue("images", selectedFiles);
+    form.setFieldTouched(field.name,true);
+    form.setFieldValue(field.name,selectedFiles);
   };
-
-  // Handle clicking on the upload container
-  const handleClick = () => {
-    document.getElementById(field.name).click();
+  const handleFileRemove = (event) => {
+    event.stopPropagation();
+    setPreviews([]);
   };
+    useEffect(() => {
+      if (!form.isSubmitting && form.values[field.name].length === 0) {
+        setPreviews([]);
+      }
+    }, [form.isSubmitting, form.values, field.name]);
 
   return (
     <Wrapper>
-      {label && <Form.Label>{label}</Form.Label>}
-      <div className="upload-container">
-        <div className="uploader" onClick={handleClick}>
-          {previews.length === 0 ? (
-            <span className="upload-icon">
-              <FaFileUpload />
-            </span>
-          ) : (
-            <span className="upload-icon inactive">
-              <FaFileUpload />
-            </span>
-          )}
-          <HiddenFileInput
-            id={field.name}
-            type="file"
-            name={field.name}
-            accept="image/*"
-            multiple={multiple}
-            onChange={handleFileChange}
-            {...props}
-          />
+      <div
+        className="upload-container"
+        onClick={() =>
+          !previews.length && document.getElementById("fileInput").click()
+        }
+      >
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/png, image/jpeg"
+          onChange={handleFileChange}
+          multiple
+          className="hidden"
+        />
+        <div className="card mb-2">
+          <div className="card-body">
+            {previews.length ? (
+              <>
+                <span className="remove-icon" onClick={handleFileRemove}>
+                  <FcRemoveImage />
+                </span>
+                <div className="prev-container">
+                  {previews.map((preview, index) => (
+                    <img
+                      key={index}
+                      src={preview}
+                      alt="prev-image"
+                      className="prev-img"
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <span className="upload-icon">
+                  <FaRegFileImage />
+                </span>
+                <div className="upload-msg">
+                  Drag & Drop file here or
+                  <button className="btn btn-light">Choose file</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="info-container">
+          <p>Supported formats: JPG, JPEG</p>
+          <p>Max size: 1MB</p>
         </div>
       </div>
 
-      {previews.length > 0 && (
-        <div className="preview-container">
-          {previews.map((src, index) => (
-            <img key={index} src={src} alt={`preview-${index}`} />
-          ))}
-        </div>
-      )}
-
-      {form.touched[field.name] && form.errors[field.name] && (
-        <Form.Control.Feedback type="invalid" className="d-block">
+      {form.touched[field.name] && !!form.errors[field.name] ? (
+        <p className="text-danger">
           {form.errors[field.name]}
-        </Form.Control.Feedback>
-      )}
+        </p>
+      ) : null}
     </Wrapper>
   );
 };
-
 export default FileUpload;
 
-const Wrapper = styled(Form.Group)`
-  .upload-container{
-    padding: 2rem;
-    background: var(--gray-400);
-    border-radius: 4px;
+const Wrapper = styled.div`
+  .upload-container {
+    border: 1px solid #f2f3fb;
+    padding: 1.25rem;
+    text-align: center;
+    height: 363px;
+    border-radius: 1rem 1rem 0 0;
+    cursor: pointer;
+    &:hover {
+      background: #e2e6ea;
+    }
+    .card-body {
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
-  .uploader {
-    width: 100%;
-    height: 300px;
-    border:1px solid #e0e0e0;
-    box-shadow: 2px 2px 16px var(--gray-800);
-    border-radius: 5px;
+  .hidden {
+    display: none;
+  }
+
+  .info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    p {
+      font-family: Inter;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 14px;
+      text-align: left;
+      color: #a6a4a4;
+      padding: 0.625rem 0.25rem;
+      margin: 0;
+    }
+  }
+  .upload-msg {
+    font-size: 16px;
+    color: #6c757d;
+    & .btn-link {
+      font-weight: 600;
+      font-size: 15px;
+      color: #323232;
+    }
+  }
+  .upload-icon {
+    font-size: 4rem;
+    color: #d2d2d2;
+  }
+  .remove-icon {
+    font-size: 2rem;
+  }
+
+  .prev-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background-color: var(--gray-100);
-    text-align: center;
-
-    .upload-icon {
-      font-size: 4rem;
-      color: var(--primary-dark-500);
-    }
-    .inactive {
-      color: #aaa;
-    }
+    gap: 1rem;
   }
-  .preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-
-    img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-  }
-  @media (max-width: 992px) {
-    .uploader {
-      height: 200px;
-    }
-    .preview-container {
-      img {
-        width: 50px;
-        height: 50px;
-      }
-    }
+  .prev-img {
+    object-fit: cover;
+    height: 50px;
+    width: 50px;
+    margin-top: 0.5rem;
+    border-radius: 4px;
   }
 `;

@@ -1,15 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createProductThunk, getAllProductsThunk } from "./allProductsThunk";
+import { createProductThunk, deleteProductThunk, getAllProductsThunk,updateProductThunk } from "./allProductsThunk";
 import {formatPrice} from "../../utils/format";
 import {toast} from "react-toastify";
 
 export const getAllProducts = createAsyncThunk("allProducts/getAllProducts",getAllProductsThunk);
-export const createProduct = createAsyncThunk("allProducts",createProductThunk);
+export const createProduct = createAsyncThunk("allProducts/createProduct",createProductThunk);
+export const deleteProduct = createAsyncThunk('allProducts/deleteProduct',deleteProductThunk);
+export const updateProduct = createAsyncThunk("allProducts/updateProduct",updateProductThunk);
 
 const initialState = {
   isLoading: false,
   isError: false,
   allProducts: [],
+  formatedProducts:[],
   tableColumns: [
     { field: "image", label: "Image" },
     { field: "productId", label: "Product ID" },
@@ -31,14 +34,15 @@ const allProductSlice = createSlice({
     })
     .addCase(getAllProducts.fulfilled,(state,action)=>{
         const {products} = action.payload;
-        state.allProducts = products.map((product)=>({
-            image:product.images[0],
+        state.formatedProducts = products.map((product)=>({
+            image:product.images[0].url,
             productId:product._id,
             name:product.name,
             price:formatPrice(product.price),
             category:product.category,
             company:product.company
-        }))
+        }));
+        state.allProducts = products;
         state.isLoading = false;
     })
     .addCase(getAllProducts.rejected,(state,action)=>{
@@ -46,10 +50,28 @@ const allProductSlice = createSlice({
         state.isError = true;
         toast.error(action.payload);
     })
+    .addCase(createProduct.pending,(state)=>{
+      state.isLoading = true;
+    })
     .addCase(createProduct.fulfilled,(state,action)=>{
       toast.success(action.payload.msg);
+      state.isLoading = false;
     })
-    .addCase(createProduct.rejected,(_,action)=>{
+    .addCase(createProduct.rejected,(state,action)=>{
+      toast.error(action.payload);
+      state.isLoading = false;
+      state.isError = true;
+    })
+    .addCase(deleteProduct.fulfilled,(state,action)=>{
+      toast.success(action.payload.msg);
+    })
+    .addCase(deleteProduct.rejected,(state,action)=>{
+      toast.error(action.payload);
+    })
+    .addCase(updateProduct.fulfilled,(state,action)=>{
+      toast.success("Product updated successfully...");
+    })
+    .addCase(updateProduct.rejected,(state,action)=>{
       toast.error(action.payload);
     })
   },

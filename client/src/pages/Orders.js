@@ -10,10 +10,10 @@ import { closeModal, openModal } from "../features/Modal/modalSlice";
 
 const Orders = () => {
   const {
-    isLoading,
-    isError,
+    ordersLoading,
+    ordersError,
     currentUserOrders,
-    tableColumns,
+    currentUserOrderColumns,
     totalCurrentUserOrder,
   } = useSelector((store) => store.orders);
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const Orders = () => {
 
   useEffect(() => {
     const modalData =
-      currentUserOrders.find((order) => order?._id === id) || {}; //sending {} for modal data
+      currentUserOrders.find((order) => order?._id === id) || {}; 
     if (id) {
       dispatch(openModal(modalData));
     }
@@ -57,14 +57,14 @@ const Orders = () => {
     return newOrder;
   });
 
-  if (isLoading) {
+  if (ordersLoading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" className="loadder" />
       </div>
     );
   }
-  if (isError) {
+  if (ordersError) {
     return <h3>There is some error...</h3>;
   }
   if (!totalCurrentUserOrder) {
@@ -78,7 +78,7 @@ const Orders = () => {
           <hr />
         </h4>
       </div>
-      <DataTable columns={tableColumns} data={tableData} />
+      <DataTable columns={currentUserOrderColumns} data={tableData} />
       <OrderModal closeModal={handleModalClose} />
     </div>
   );

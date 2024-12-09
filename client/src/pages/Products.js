@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { productsLoading, productsError,filters,sort,page } = useSelector(
+  const { allProductsLoading, allProductsError,filters,sort,page } = useSelector(
     (state) => state.products
   );
 
@@ -29,17 +29,17 @@ const Products = () => {
     dispatch(getAllProducts(params));
   }, [dispatch, filters,sort,page,navigate]);
 
-  if (productsLoading) {
+  if (allProductsLoading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" variant="secondary" className="loadder" />
       </div>
     );
   }
-  if (productsError) {
+  if (allProductsError) {
     return (
       <div className="page flx-cntr">
-        <h3>{JSON.stringify(productsError)}</h3>
+        <h3>There is some error...</h3>
       </div>
     );
   }

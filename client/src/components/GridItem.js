@@ -9,7 +9,7 @@ const GridItem = (props) => {
   return (
     <Wrapper>
       <div className="image-container">
-        <img src={images[0]} alt={name} className="image-fit" />
+        <img src={images[0].url} alt={name} className="image-fit" />
         {isDashboard && (
           <Link to={`/dashboard/products/${_id}`} className="search-icon">
             <BiSearch />

@@ -1,6 +1,6 @@
 import TextInput from "./TextInput"
 import { Form } from "formik";
-import { Row } from "react-bootstrap";
+import { Row,Spinner} from "react-bootstrap";
 
 const Register = ({handleSubmit,touched,errors,isLoading}) => {
   return (
@@ -30,8 +30,19 @@ const Register = ({handleSubmit,touched,errors,isLoading}) => {
         errors={errors}
       />
       <Row>
-        <button className="button" type="submit" disabled={isLoading}>{
-            !isLoading ? "Submit":"Submitting"}</button>
+        <button className="button" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          ) : (
+            <span>Submit</span>
+          )}
+        </button>
       </Row>
     </Form>
   );

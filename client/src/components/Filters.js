@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateFilters,clearFilters } from "../features/Products/productsSlice";
 import { formatPrice } from "../utils/format";
 import { useMemo, useState } from "react";
+import { items } from "fusioncharts";
 const COMPANIES = [
   { _id: 1, name: "All", value: "" },
   { _id: 2, name: "Sennheister", value: "sennheister" },
@@ -39,7 +40,7 @@ const COLORS = [
 ];
 const Filters = () => {
   const dispatch = useDispatch();
-  const { maxPrice,filters:{category,company,freeShipping,price,colors,name} } = useSelector((state) => state.products);
+  const { filters:{category,company,freeShipping,price,colors,name},filterLayout:{categories,companies,colors:layoutColors, prices} } = useSelector((state) => state.products);
   const [search, setSearch] = useState(name || "");
 
   const handleFilterChange = (filter) => {
@@ -74,14 +75,14 @@ const Filters = () => {
       </Form.Group>
       <Form.Group controlId="formfilterCategory" className="mb-3">
         <Form.Text className="fw-bold">Category</Form.Text>
-        {CATEGORIES.map(({ _id, name, value }) => (
+        {categories.map((item,index) => (
           <Form.Check
-            key={_id}
+            key={index}
             type="radio"
-            label={name}
+            label={item.name}
             name="category"
-            value={value}
-            checked={value === category}
+            value={item.value}
+            checked={item.value === category}
             onChange={(e) => handleFilterChange({ category: e.target.value })}
             className="text-capitalize"
           />
@@ -93,9 +94,9 @@ const Filters = () => {
           value={company}
           onChange={(e) => handleFilterChange({ company: e.target.value })}
         >
-          {COMPANIES.map(({ _id, name, value }) => (
-            <option value={value} key={_id}>
-              {name}
+          {companies.map((item,index) => (
+            <option value={item.value} key={index}>
+              {item.name}
             </option>
           ))}
         </Form.Select>
@@ -103,13 +104,13 @@ const Filters = () => {
       <div className="mb-3">
         <Form.Label className="fw-bold">Colors</Form.Label>
         <div className="colors">
-          {COLORS.map(({ value, _id }) => (
+          {layoutColors.map((color,index) => (
             <Color
-              $clr={value}
-              key={_id}
+              $clr={color}
+              key={index}
               type="checkbox"
-              checked={colors.includes(value)}
-              value={value}
+              checked={colors.includes(color)}
+              value={color}
               onChange={(event) => {
                 const { value, checked } = event.target;
                 const updatedColors = checked
@@ -126,8 +127,8 @@ const Filters = () => {
         <Form.Label className="fw-bold">Price</Form.Label>
         <p className="mb-0">{formatPrice(price)}</p>
         <Form.Range
-          min={0}
-          max={maxPrice}
+          min={prices.minPrice}
+          max={prices.maxPrice}
           value={price}
           onChange={(e) => handleFilterChange({ price: e.target.value })}
         />

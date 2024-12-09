@@ -6,7 +6,7 @@ import styled from "styled-components";
 const ViewReview = () => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((states) => states.modal);
-  const { totalReviews, reviews } = modalData;
+  const { singleProductReviews, singleProductTotalReviews } = modalData;
   const handleClose = () => {
     dispatch(closeModal());
   };
@@ -17,25 +17,29 @@ const ViewReview = () => {
       </Modal.Header>
       <Modal.Body>
         <Wrapper>
-          <p>
-            <span className="review-count">Review Count: </span>{" "}
-            {totalReviews ?? 0}
-          </p>
-          {totalReviews < 1 && <p>No review are present on this product</p>}
-          {reviews?.map(({ title, comment, user: { name }, _id }) => (
-            <div key={_id} className="review">
-              <div className="avatar-container">
-                <div className="avatar">
-                  <span>{name.slice(0, 1)}</span>
+          <h4>
+            Review Count:
+            <span className="text-muted">{singleProductTotalReviews ?? 0}</span>
+          </h4>
+          {singleProductTotalReviews < 1 && (
+            <h5 className="text-muted">No review are present on this product</h5>
+          )}
+          {singleProductReviews?.map(
+            ({ title, comment, user: { name }, _id }) => (
+              <div key={_id} className="review">
+                <div className="avatar-container">
+                  <div className="avatar">
+                    <span>{name.slice(0, 1)}</span>
+                  </div>
+                  <span className="avatar-name">{name}</span>
                 </div>
-                <span className="avatar-name">{name}</span>
+                <div className="review-contents">
+                  <p className="review-title">{title}</p>
+                  <p className="review-text">{comment}</p>
+                </div>
               </div>
-              <div className="review-contents">
-                <p className="review-title">{title}</p>
-                <p className="review-text">{comment}</p>
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </Wrapper>
       </Modal.Body>
     </Modal>
@@ -45,25 +49,20 @@ const ViewReview = () => {
 export default ViewReview;
 
 const Wrapper = styled.div`
-  .review-count {
-    color: var(--dark);
-    font-weight: 500;
-  }
   .avatar-container {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    /* margin-bottom: 0.5rem; */
     .avatar-name {
       font-weight: 500;
-      font-size: 1.25rem;
+      font-size: 1rem;
       text-transform: capitalize;
-      color: var(--gray-700);
+      color: var(--dark);
     }
   }
   .avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background: var(--primary-dark-500);
     border-radius: 50%;
     position: relative;
@@ -79,7 +78,7 @@ const Wrapper = styled.div`
     }
   }
   .review-contents {
-    margin-left: 2.5rem;
+    margin-left: 2rem;
   }
   .review-title {
     color: var(--gray-600);

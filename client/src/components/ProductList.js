@@ -24,7 +24,7 @@ const ProductList = () => {
             <ListItem key={product._id} className="g-2">
               <Col md={4} className="image-container">
                 <img
-                  src={product.images[0]}
+                  src={product.images[0].url}
                   alt={product.name}
                   className="image-fit"
                 />

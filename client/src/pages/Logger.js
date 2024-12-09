@@ -10,7 +10,7 @@ const Logger = ({ children }) => {
   const [isUser, setIsUser] = useState(
     window.location.pathname === "/login" ? true : false
   );
-  const { user, isLoading, isError } = useSelector((state) => state.auth);
+  const { user, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const Logger = ({ children }) => {
     if (user) {
       setTimeout(() => {
         navigate("/dashboard");
-      }, 6000);
+      }, 2000);
     }
   }, [navigate, user]);
 

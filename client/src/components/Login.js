@@ -1,7 +1,7 @@
-import { Row } from "react-bootstrap";
+import { Row, Spinner } from "react-bootstrap";
 import { TextInput } from "../components";
 import { Form } from "formik";
-const Login = ({ handleSubmit, touched, errors,isLoading }) => {
+const Login = ({ handleSubmit, touched, errors, isLoading }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <TextInput
@@ -22,7 +22,17 @@ const Login = ({ handleSubmit, touched, errors,isLoading }) => {
       />
       <Row>
         <button className="button" type="submit" disabled={isLoading}>
-          {!isLoading ? "Submit":"Submitting"}
+          {isLoading ? (
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          ) : (
+            <span>Submit</span>
+          )}
         </button>
       </Row>
     </Form>

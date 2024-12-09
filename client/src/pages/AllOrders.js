@@ -1,26 +1,26 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrders } from "../features/AllOrders/allOrdersSlice";
+import { getAllOrders } from "../features/Orders/ordersSlice";
 import { Spinner } from "react-bootstrap";
 import {DataTable} from "../components";
 
 const AllOrders = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, tableColumns, allOrders } = useSelector(
-    (store) => store.allOrders
+  const { ordersLoading, ordersError, allOrderColumns, allOrders } = useSelector(
+    (store) => store.orders
   );
   useEffect(() => {
     dispatch(getAllOrders());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (ordersLoading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" className="loadder" />
       </div>
     );
   }
-  if (isError) {
+  if (ordersError) {
     return (<h3>There is some error...</h3>)
   }
   return (
@@ -29,7 +29,7 @@ const AllOrders = () => {
         <h3>All Order: </h3>
         <hr />
       </div>
-      <DataTable columns={tableColumns} data={allOrders}/>
+      <DataTable columns={allOrderColumns} data={allOrders}/>
     </div>
   );
 };

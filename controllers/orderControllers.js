@@ -11,7 +11,7 @@ const createOrder = async (req, res) => {
   if (!cartItems || cartItems.length < 1) {
     throw new BadRequestError("No cart Item Provided");
   }
-  
+
   if (!tax || !shippingFee) {
     throw new BadRequestError("Please provide tax and shipping fee");
   }
@@ -33,7 +33,7 @@ const createOrder = async (req, res) => {
       amount: item.amount,
       name,
       price,
-      image: images[0],
+      image: images[0].url,
       product: _id,
       color: item.color,
     };
@@ -70,7 +70,6 @@ const getAllOrders = async (req, res) => {
 const orderPaymentVerification = async (req, res) => {
   const { orderId, razorpayPaymentId, razorpayOrderId, razorpaySignature } =
     req.body;
-    console.log("1")
   if (
     !orderId ||
     !razorpayPaymentId ||
@@ -79,17 +78,13 @@ const orderPaymentVerification = async (req, res) => {
   ) {
     throw new BadRequestError("Please provide id and signature");
   }
-  console.log("2")
-
   const order = await Order.findOne({ _id: orderId });
   if (!order) {
     throw new NotFoundError(`No order exist with id: ${orderId}`);
   }
-  console.log("3")
   if (order.status === "paid") {
     throw new BadRequestError("Order already placed");
   }
-  console.log("4")
   const secret = process.env.RAZORPAY_API_SECRET;
 
   // const shasum = crypto.createHmac("sha256", );
@@ -104,13 +99,11 @@ const orderPaymentVerification = async (req, res) => {
     order.status = "failed";
     await order.save();
     throw new BadRequestError("Transaction not legit");
-  } 
-  console.log("5")
+  }
 
   order.paymentId = razorpayPaymentId;
   order.status = "paid";
   await order.save();
-  console.log("6")
 
   res.status(StatusCodes.CREATED).json({
     success: true,
@@ -143,7 +136,9 @@ const updateOrder = async (req, res) => {
 };
 
 const getCurrentUserOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user.userId }).populate("orderItems.product");
+  const orders = await Order.find({ user: req.user.userId }).populate(
+    "orderItems.product"
+  );
 
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };

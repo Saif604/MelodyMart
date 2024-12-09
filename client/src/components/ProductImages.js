@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 const ProductImages = (props) => {
   const { images } = props;
-  const [mainImg,setMainImg] = useState(images?.[0]);
+  const [mainImg,setMainImg] = useState(images?.[0]?.url);
   return (
     <Wrapper fluid>
       <Row className="mb-3">
@@ -11,9 +11,9 @@ const ProductImages = (props) => {
       </Row>
       <Row>
         {
-          images?.map((src,index)=>(
+          images?.map((image,index)=>(
             <Col key={index}>
-              <img src={src} alt="prod-img" className={`image-fit gallery-img ${src === mainImg ? "active":""}`} onClick={()=>setMainImg(src)}/>
+              <img src={image.url} alt="prod-img" className={`image-fit gallery-img ${image.url === mainImg ? "active":""}`} onClick={()=>setMainImg(image.url)}/>
             </Col>
           ))
         }
