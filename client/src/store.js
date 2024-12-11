@@ -5,9 +5,7 @@ import modalReducer from "./features/Modal/modalSlice.js";
 import ordersReducer from "./features/Orders/ordersSlice.js";
 import cartReducer from "./features/Cart/cartSlice.js";
 import reviewReducer from "./features/Review/reviewSlice.js";
-import profileReducer from "./features/Profile/profileSlice.js";
-import allUsersReducer from "./features/AllUsers/allUsersSlice.js";
-import allProductsReducer from "./features/AllProducts/allProductsSlice.js";
+import userReducer from "./features/User/userSlice.js";
 
 export const store = configureStore({
     reducer:{
@@ -17,9 +15,7 @@ export const store = configureStore({
         cart:cartReducer,
         orders:ordersReducer,
         reviews:reviewReducer,
-        profile:profileReducer,
-        allUsers:allUsersReducer,
-        allProducts:allProductsReducer
+        users:userReducer
     }
 })
 export default store;

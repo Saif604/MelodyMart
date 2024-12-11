@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { DataTable } from "../components";
+import { DataTable, WrapperCard } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserOrders } from "../features/Orders/ordersSlice";
 import { Spinner } from "react-bootstrap";
@@ -10,9 +10,8 @@ import { closeModal, openModal } from "../features/Modal/modalSlice";
 
 const Orders = () => {
   const {
-    ordersLoading,
-    ordersError,
-    currentUserOrders,
+    status,
+    currentUserFormatedOrders,
     currentUserOrderColumns,
     totalCurrentUserOrder,
   } = useSelector((store) => store.orders);
@@ -21,15 +20,15 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(getCurrentUserOrders());
-  }, [dispatch]);
+  }, [dispatch, status.verifyPayment.loading]);
 
   useEffect(() => {
     const modalData =
-      currentUserOrders.find((order) => order?._id === id) || {}; 
+      currentUserFormatedOrders.find((order) => order?._id === id) || {};
     if (id) {
       dispatch(openModal(modalData));
     }
-  }, [id, dispatch, currentUserOrders]);
+  }, [id, dispatch, currentUserFormatedOrders]);
 
   const handleModalOpen = (order) => {
     dispatch(openModal({ ...order }));
@@ -38,7 +37,7 @@ const Orders = () => {
     dispatch(closeModal());
   };
 
-  const tableData = currentUserOrders.map((order) => {
+  const tableData = currentUserFormatedOrders.map((order) => {
     const newOrder = { ...order };
     if (order._id) {
       newOrder._id = (
@@ -57,30 +56,32 @@ const Orders = () => {
     return newOrder;
   });
 
-  if (ordersLoading) {
+  if (status.getCurrentUserOrders.loading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" className="loadder" />
       </div>
     );
   }
-  if (ordersError) {
+  if (status.getCurrentUserOrders.error) {
     return <h3>There is some error...</h3>;
   }
   if (!totalCurrentUserOrder) {
     return <h3>No order placed</h3>;
   }
   return (
-    <div>
+    <WrapperCard>
       <div>
-        <h4>
-          Orders:
-          <hr />
-        </h4>
+        <div>
+          <h4>
+            Orders:
+            <hr />
+          </h4>
+        </div>
+        <DataTable columns={currentUserOrderColumns} data={tableData} />
+        <OrderModal closeModal={handleModalClose} />
       </div>
-      <DataTable columns={currentUserOrderColumns} data={tableData} />
-      <OrderModal closeModal={handleModalClose} />
-    </div>
+    </WrapperCard>
   );
 };
 export default Orders;

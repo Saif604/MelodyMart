@@ -1,22 +1,33 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import { LineChart, BarChart, ProfileWizard, DonutChart } from "../components";
+import {
+  LineChart,
+  BarChart,
+  ProfileWizard,
+  DonutChart,
+  WrapperCard,
+} from "../components";
 import { useEffect, useState } from "react";
 import {
   getCurrentUser,
-  getCurrentUserOrders,
   updateUser,
   updateUserPassword,
-} from "../features/Profile/profileSlice";
+} from "../features/User/userSlice";
+import { getCurrentUserOrders } from "../features/Orders/ordersSlice";
 import { closeModal, openModal } from "../features/Modal/modalSlice";
 import { EditUser } from "../components/Modals";
+import { formatBar, formatDonut, formatLine } from "../utils/format";
 
 const Profile = () => {
   const [isPasswordEdit, setIsPasswordEdit] = useState(false);
   const dispatch = useDispatch();
-  const { isLoading, isError, currentUser, lineData, barData, donutData } =
-    useSelector((store) => store.profile);
+  const { status: userStatus, currentUser } = useSelector(
+    (store) => store.users
+  );
+  const { status: orderStatus, currentUserOrders } = useSelector(
+    (store) => store.orders
+  );
   const { show } = useSelector((store) => store.modal);
 
   useEffect(() => {
@@ -37,8 +48,7 @@ const Profile = () => {
           dispatch(closeModal());
         })
         .catch((err) => console.error(err));
-    }
-    else{
+    } else {
       dispatch(updateUserPassword(userData))
         .then(() => {
           dispatch(getCurrentUser());
@@ -48,47 +58,60 @@ const Profile = () => {
     }
   };
 
-  if (isLoading) {
-    return <div className="page flx-cntr">
-      <Spinner animation="grow" className="loadder"/>
-    </div>
+  if (
+    userStatus.getCurrentUser.loading ||
+    orderStatus.getCurrentUserOrders.loading
+  ) {
+    return (
+      <div className="page flx-cntr">
+        <Spinner animation="grow" className="loadder" />
+      </div>
+    );
   }
-  if (isError) {
+  if (
+    userStatus.getCurrentUser.error ||
+    orderStatus.getCurrentUserOrders.error
+  ) {
     return <h3>There is some error...</h3>;
   }
-
   return (
-    <Wrapper>
-      <div>
-        <h4>Profile</h4>
-        <hr />
-      </div>
-      <Row className="gy-3">
-        <Col sm={6} lg={4}>
-          <div className="card">
-            <ProfileWizard user={currentUser} handleEdit={handleEdit} />
-          </div>
-        </Col>
-        <Col sm={12} md={6} lg={8}>
-          <div className="card">
-            <BarChart data={barData} />
-          </div>
-        </Col>
-        <Col md={6}>
-          <div className="card">
-            <LineChart data={lineData} />
-          </div>
-        </Col>
-        <Col md={6}>
-          <div className="card">
-            <DonutChart data={donutData} />
-          </div>
-        </Col>
-      </Row>
-      {show && (
-        <EditUser handleUpdate={handleUpdate} isPasswordEdit={isPasswordEdit} />
-      )}
-    </Wrapper>
+    <WrapperCard>
+      <Wrapper>
+        <div>
+          <h4>Profile</h4>
+          <hr />
+        </div>
+        <Row className="gy-3">
+          <Col sm={6} lg={4}>
+            <div className="card">
+              <ProfileWizard user={currentUser} handleEdit={handleEdit} />
+            </div>
+          </Col>
+          <Col sm={12} md={6} lg={8}>
+            <div className="card">
+              <BarChart data={formatBar(currentUserOrders)} />
+            </div>
+          </Col>
+          <Col md={6}>
+            <div className="card">
+              <LineChart data={formatLine(currentUserOrders)} />
+            </div>
+          </Col>
+          <Col md={6}>
+            <div className="card">
+              <DonutChart data={formatDonut(currentUserOrders)} />
+            </div>
+          </Col>
+        </Row>
+        {show && (
+          <EditUser
+            handleUpdate={handleUpdate}
+            isPasswordEdit={isPasswordEdit}
+            updateStatus={userStatus}
+          />
+        )}
+      </Wrapper>
+    </WrapperCard>
   );
 };
 export default Profile;

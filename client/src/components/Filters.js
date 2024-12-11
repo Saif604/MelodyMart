@@ -4,40 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateFilters,clearFilters } from "../features/Products/productsSlice";
 import { formatPrice } from "../utils/format";
 import { useMemo, useState } from "react";
-import { items } from "fusioncharts";
-const COMPANIES = [
-  { _id: 1, name: "All", value: "" },
-  { _id: 2, name: "Sennheister", value: "sennheister" },
-  { _id: 3, name: "Gibson", value: "gibson" },
-  { _id: 4, name: "Kawai", value: "kawai" },
-  { _id: 5, name: "Yamha", value: "yamha" },
-];
-const CATEGORIES = [
-  { _id: 1, name: "All", value: "" },
-  { _id: 2, name: "Drum", value: "drum" },
-  { _id: 3, name: "Flute", value: "flute" },
-  { _id: 4, name: "Guitar", value: "guitar" },
-  {_id:5,name:"Accordion", value:"accordion"},
-  {_id:6,name:"Piano", value:"piano"},
-];
-const COLORS = [
-  {
-    _id: 1,
-    value: "#191970",
-  },
-  {
-    _id: 2,
-    value: "#50C878",
-  },
-  {
-    _id: 3,
-    value: "#FF4500",
-  },
-  {
-    _id: 4,
-    value: "#B76E79",
-  },
-];
+
 const Filters = () => {
   const dispatch = useDispatch();
   const { filters:{category,company,freeShipping,price,colors,name},filterLayout:{categories,companies,colors:layoutColors, prices} } = useSelector((state) => state.products);
@@ -74,12 +41,12 @@ const Filters = () => {
         />
       </Form.Group>
       <Form.Group controlId="formfilterCategory" className="mb-3">
-        <Form.Text className="fw-bold">Category</Form.Text>
+        <Form.Label className="fw-bold">Category</Form.Label>
         {categories.map((item,index) => (
           <Form.Check
             key={index}
             type="radio"
-            label={item.name}
+            label={item.label}
             name="category"
             value={item.value}
             checked={item.value === category}
@@ -96,7 +63,7 @@ const Filters = () => {
         >
           {companies.map((item,index) => (
             <option value={item.value} key={index}>
-              {item.name}
+              {item.label}
             </option>
           ))}
         </Form.Select>

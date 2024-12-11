@@ -29,10 +29,10 @@ export const formatPrice = (number) => {
 
 export const formatDonut = (data) => {
   // Step 1: Calculate the total price for each company
-  const companyTotals = data.reduce((acc, order) => {
-    order.orderItems.forEach((item) => {
-      const company = item.product.company;
-      const price = item.product.price;
+  const companyTotals = data?.reduce((acc, order) => {
+    order?.orderItems?.forEach((item) => {
+      const company = item.company;
+      const price = item.price;
 
       if (!acc[company]) {
         acc[company] = 0; // Initialize company total
@@ -42,7 +42,6 @@ export const formatDonut = (data) => {
 
     return acc;
   }, {});
-
   // Step 2: Calculate the overall total price
   const grandTotal = Object.values(companyTotals).reduce(
     (sum, value) => sum + value,

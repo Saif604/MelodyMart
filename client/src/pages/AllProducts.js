@@ -1,8 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, getAllProducts, updateProduct } from "../features/AllProducts/allProductsSlice";
+import {
+  deleteProduct,
+  getAllProducts,
+  updateProduct,
+} from "../features/Products/productsSlice";
 import { useEffect } from "react";
 import { Spinner } from "react-bootstrap";
-import { DataTable } from "../components";
+import { DataTable, WrapperCard } from "../components";
 import { FaEdit } from "react-icons/fa";
 import { ImBin } from "react-icons/im";
 import { closeModal, openModal } from "../features/Modal/modalSlice";
@@ -10,24 +14,25 @@ import EditProduct from "../components/Modals/EditProduct";
 
 const AllProducts = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, allProducts,formatedProducts, tableColumns } = useSelector(
-    (store) => store.allProducts
-  );
-  const {show} = useSelector((store)=>store.modal);
+  const { status, allProducts, allProductsTableData, allProductsTableColumns } =
+    useSelector((store) => store.products);
+  const { show } = useSelector((store) => store.modal);
   useEffect(() => {
     dispatch(getAllProducts("?limit=1000"));
   }, [dispatch]);
 
   const handleProductDelete = (productId) => {
-    dispatch(deleteProduct(productId)).then(()=>{
-      dispatch(getAllProducts("?limit=1000"));
-    }).catch((error)=>console.error(error));
+    dispatch(deleteProduct(productId))
+      .then(() => {
+        dispatch(getAllProducts("?limit=1000"));
+      })
+      .catch((error) => console.error(error));
   };
-  const handleProductEdit = (productId) =>{
-    const editProduct = allProducts?.find(({_id})=>_id === productId);
-    dispatch(openModal({...editProduct}));
-  }
-  const handleUpdates = (productId,updatedProduct) =>{
+  const handleProductEdit = (productId) => {
+    const editProduct = allProducts?.find(({ _id }) => _id === productId);
+    dispatch(openModal({ ...editProduct }));
+  };
+  const handleUpdates = (productId, updatedProduct) => {
     const formData = new FormData();
     Object.entries(updatedProduct).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -42,29 +47,34 @@ const AllProducts = () => {
         formData.append(key, value);
       }
     });
-    dispatch(updateProduct({productId,updatedProduct:formData})).then(()=>{
-      dispatch(getAllProducts("?limit=1000"));
-      dispatch(closeModal());
-    })
-  }
-  if (isLoading) {
+    dispatch(updateProduct({ productId, updatedProduct: formData })).then(
+      () => {
+        dispatch(getAllProducts("?limit=1000"));
+        dispatch(closeModal());
+      }
+    );
+  };
+  if (status.getAllProducts.loading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" className="loadder" />
       </div>
     );
   }
-  if (isError) {
+  if (status.getAllProducts.error) {
     return <h3>There is some error...</h3>;
   }
-  const tableData = formatedProducts.map((product) => {
+  const tableData = allProductsTableData.map((product) => {
     const newProduct = { ...product };
     if (product.company) {
       newProduct.company = (
         <div className="d-flex align-items-center justify-content-between">
           <span>{product.company}</span>
           <div className="d-flex gap-5">
-            <span className="icon" onClick={()=>handleProductEdit(product.productId)}>
+            <span
+              className="icon"
+              onClick={() => handleProductEdit(product.productId)}
+            >
               <FaEdit />
             </span>
             <span
@@ -80,14 +90,22 @@ const AllProducts = () => {
     return newProduct;
   });
   return (
-    <div>
+    <WrapperCard>
       <div>
-        <h3>All Products: </h3>
-        <hr />
+        <div>
+          <h3>All Products: </h3>
+          <hr />
+        </div>
+        <DataTable columns={allProductsTableColumns} data={tableData} />
+        {show && (
+          <EditProduct
+            title="Edit Product"
+            handleUpdates={handleUpdates}
+            isLoading={status.updateProduct.loading}
+          />
+        )}
       </div>
-      <DataTable columns={tableColumns} data={tableData} />
-      {show && <EditProduct title="Edit Product" handleUpdates={handleUpdates}/>}
-    </div>
+    </WrapperCard>
   );
 };
 export default AllProducts;

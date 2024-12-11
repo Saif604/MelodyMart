@@ -10,7 +10,7 @@ import {
   logoutUserThunk,
   registerUserThunk,
 } from "./authThunk";
-import { updateUser } from "../Profile/profileSlice";
+import { updateUser } from "../User/userSlice";
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -33,7 +33,6 @@ const authSlice = createSlice({
       state.isSidebarOpen = !state.isSidebarOpen;
     },
     clearStore: (state) => {
-      console.log("clearStore");
     },
   },
   extraReducers: (builder) => {

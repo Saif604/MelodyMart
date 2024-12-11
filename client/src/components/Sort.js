@@ -1,5 +1,5 @@
 import { BsGridFill, BsList } from "react-icons/bs";
-import { Row, Col, Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setView,updateSort } from "../features/Products/productsSlice";
 
@@ -8,7 +8,6 @@ const Sort = () => {
   const { totalProducts,isGrid,sort} = useSelector((state) => state.products);
 
   const handleSort = (sortType)=>{
-    console.log(sortType)
     dispatch(updateSort(sortType));
   }
   const handleView = (isGridView)=>{
@@ -16,7 +15,7 @@ const Sort = () => {
   }
   
   return (
-    <Row className="mb-3">
+    <>
       <Col md={4} className="d-flex align-items-center justify-content-between">
         <div className="mb-1">
           <span
@@ -46,7 +45,7 @@ const Sort = () => {
           <option value="-name">Name(Z-A)</option>
         </Form.Select>
       </Col>
-    </Row>
+    </>
   );
 };
 export default Sort;

@@ -8,19 +8,19 @@ import { verifyPayment } from "../features/Orders/ordersSlice";
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { orderCheckout, ordersLoading, ordersError } = useSelector(
+  const { orderCheckout, status } = useSelector(
     (store) => store.orders
   );
   const {name,email}= useSelector((store)=>store.auth.user);
 
-  if (ordersLoading) {
+  if (status.createOrder.loading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" variant="secondary" className="loadder" />
       </div>
     );
   }
-  if (ordersError) {
+  if (status.createOrder.error) {
     return <h1>There is some Error....</h1>;
   }
   if (!orderCheckout || !orderCheckout.orderItems.length) {

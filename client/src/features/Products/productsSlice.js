@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getUniques } from "../../utils/products";
+import { formatPrice } from "../../utils/format";
 import {
-  createReviewThunk,
+  createProductThunk,
+  deleteProductThunk,
   getAllProductsThunk,
-  getSingleProductReviewsThunk,
   getSingleProductThunk,
+  updateProductThunk,
 } from "./productsThunk";
 import { toast } from "react-toastify";
 
@@ -11,17 +14,21 @@ export const getAllProducts = createAsyncThunk(
   "products/getAllProducts",
   getAllProductsThunk
 );
-export const getSingleProductReviews = createAsyncThunk(
-  "products/getSingleProductReviews",
-  getSingleProductReviewsThunk
-);
-export const createReview = createAsyncThunk(
-  "products/createReview",
-  createReviewThunk
-);
 export const getSingleProduct = createAsyncThunk(
   "products/getSingleProduct",
   getSingleProductThunk
+);
+export const createProduct = createAsyncThunk(
+  "products/createProduct",
+  createProductThunk
+);
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  updateProductThunk
+);
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  deleteProductThunk
 );
 
 const initialFilters = {
@@ -34,15 +41,11 @@ const initialFilters = {
 };
 
 const initialState = {
-  allProductsLoading: false,
-  allProductsError: false,
-  singleProductLoading: true,
-  singleProductError: false,
-  singleProductReviews: [],
-  singleProduct: null,
-  singleProductTotalReviews: 0,
   allProducts: [],
   allProductsCount: 0,
+  singleProduct: null,
+  singleProductReviews: [],
+  singleProductTotalReviews: 0,
   products: [],
   totalProducts: 0,
   pages: 0,
@@ -56,6 +59,22 @@ const initialState = {
     companies: [],
     colors: [],
     prices: {},
+  },
+  allProductsTableColumns: [
+    { field: "image", label: "Image" },
+    { field: "productId", label: "Product ID" },
+    { field: "name", label: "Name" },
+    { field: "price", label: "Price" },
+    { field: "category", label: "Category" },
+    { field: "company", label: "Company" },
+  ],
+  allProductsTableData: [],
+  status: {
+    getAllProducts: { loading: true, error: null },
+    getSingleProduct: { loading: true, error: null },
+    createProduct: { loading: false, error: null },
+    updateProduct: { loading: false, error: null },
+    deleteProduct: { loading: false, error: null },
   },
 };
 
@@ -86,88 +105,85 @@ const productsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllProducts.pending, (state) => {
-        state.allProductsLoading = true;
+        state.status.getAllProducts.loading = true;
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
         const { products, nbhits, pages, featured, allProducts } =
           action.payload;
-        state.allProductsLoading = false;
         state.products = [...products];
         state.totalProducts = nbhits;
         state.pages = pages;
         state.featuredProducts = featured;
+        state.allProducts = allProducts;
 
-        state.filterLayout.categories = [
-          "all",
-          ...new Set(allProducts.map((product) => product.category)),
-        ].map((item, index) => {
-          if (item === "all") return { name: "All", value: "" };
-          return {
-            name: item.slice(0, 1).toUpperCase() + item.slice(1),
-            value: item,
-          };
-        });
+        state.filterLayout.categories = getUniques(allProducts, "category");
+        state.filterLayout.companies = getUniques(allProducts, "company");
+        state.filterLayout.colors = getUniques(allProducts, "colors");
+        state.filterLayout.prices = getUniques(allProducts, "prices");
 
-        state.filterLayout.companies = ["all",
-          ...new Set(allProducts.map((product) => product.company)),
-        ].map((item,index)=>{
-          if(item === "all") return {name:"All",value:""}
-          return {name:item.slice(0,1).toUpperCase() + item.slice(1),value:item}
-        });
+        state.allProductsTableData = allProducts.map((product) => ({
+          image: product.images[0].url,
+          productId: product._id,
+          name: product.name,
+          price: formatPrice(product.price),
+          category: product.category,
+          company: product.company,
+        }));
 
-        state.filterLayout.colors = allProducts.reduce((acc, product) => {
-          product.colors.forEach((color) => {
-            if (!acc.includes(color)) {
-              acc.push(color);
-            }
-          });
-          return acc;
-        }, []);
-
-        state.filterLayout.prices = allProducts.reduce(
-          (acc, product) => {
-            if (product.price < acc.minPrice) acc.minPrice = product.price;
-            if (product.price > acc.maxPrice) acc.maxPrice = product.price;
-            return acc;
-          },
-          { minPrice: Infinity, maxPrice: -Infinity }
-        );
+        state.status.getAllProducts.loading = false;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
-        state.allProductsLoading = false;
-        state.allProductsError = action.payload;
         toast.error(action.payload);
+        state.status.getAllProducts.loading = false;
+        state.status.getAllProducts.error = action.payload;
       })
       .addCase(getSingleProduct.pending, (state) => {
-        state.singleProductLoading = true;
+        state.status.getSingleProduct.loading = true;
       })
       .addCase(getSingleProduct.fulfilled, (state, action) => {
         state.singleProduct = { ...action.payload };
-        state.singleProductLoading = false;
+        state.status.getSingleProduct.loading = false;
       })
       .addCase(getSingleProduct.rejected, (state, action) => {
-        state.singleProductLoading = false;
-        state.singleProductError = true;
+        state.status.getSingleProduct.loading = false;
+        state.status.getSingleProduct.error = action.payload;
         toast.error(action.payload);
       })
-      .addCase(getSingleProductReviews.pending, (state) => {
-        state.singleProductLoading = true;
+      .addCase(createProduct.pending, (state) => {
+        state.status.createProduct.loading = true;
       })
-      .addCase(getSingleProductReviews.fulfilled, (state, action) => {
-        const { count: totalReviews, reviews } = action.payload;
-        state.singleProductReviews = [...reviews];
-        state.singleProductTotalReviews = totalReviews;
-        state.singleProductLoading = false;
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.status.createProduct.loading = false;
+        toast.success(action.payload.msg);
       })
-      .addCase(getSingleProductReviews.rejected, (state, action) => {
-        state.singleProductLoading = false;
+      .addCase(createProduct.rejected, (state, action) => {
+        state.status.createProduct.loading = false;
+        state.status.createProduct.error = action.payload;
         toast.error(action.payload);
       })
-      .addCase(createReview.fulfilled, (_, action) => {
-        toast.success("Review added successfully...");
+      .addCase(deleteProduct.pending, (state) => {
+        state.status.deleteProduct.loading = true;
       })
-      .addCase(createReview.rejected, (_, action) => {
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.status.deleteProduct.loading = false;
+        toast.success(action.payload.msg);
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.status.deleteProduct.loading = false;
+        state.status.deleteProduct.error = action.payload;
         toast.error(action.payload);
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.status.updateProduct.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.status.updateProduct.loading = false;
+        toast.success("Product updated successfully...");
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        toast.error(action.payload);
+        state.status.updateProduct.loading = false;
+        state.status.updateProduct.error = action.payload;
       });
   },
 });

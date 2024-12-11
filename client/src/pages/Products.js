@@ -1,42 +1,42 @@
 import styled from "styled-components";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { getAllProducts } from "../features/Products/productsSlice";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Filters, Sort, ProductList, Pagination } from "../components";
+import { Filters, Sort, ProductList} from "../components";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { allProductsLoading, allProductsError,filters,sort,page } = useSelector(
+  const { status, filters, sort, page } = useSelector(
     (state) => state.products
   );
 
   useEffect(() => {
-    const {name,category,company,freeShipping,colors,price} = filters;
-    let queryObj = {sort,page:page};
-    if(name) queryObj.name = name;
-    if(category) queryObj.category = category;
-    if(company) queryObj.company = company;
-    if(freeShipping) queryObj.freeShipping = freeShipping;
-    if(colors && colors.length > 0) queryObj.colors = colors.join(",");
-    if(price) queryObj.numericFilters = `price<=${price}`;
+    const { name, category, company, freeShipping, colors, price } = filters;
+    let queryObj = { sort, page: page };
+    if (name) queryObj.name = name;
+    if (category) queryObj.category = category;
+    if (company) queryObj.company = company;
+    if (freeShipping) queryObj.freeShipping = freeShipping;
+    if (colors && colors.length > 0) queryObj.colors = colors.join(",");
+    if (price) queryObj.numericFilters = `price<=${price}`;
     const params = new URLSearchParams(queryObj).toString();
     navigate(`?${params}`);
-    
-    dispatch(getAllProducts(params));
-  }, [dispatch, filters,sort,page,navigate]);
 
-  if (allProductsLoading) {
+    dispatch(getAllProducts(params));
+  }, [dispatch, filters, sort, page, navigate]);
+
+  if (status.getAllProducts.loading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" variant="secondary" className="loadder" />
       </div>
     );
   }
-  if (allProductsError) {
+  if (status.getAllProducts.error) {
     return (
       <div className="page flx-cntr">
         <h3>There is some error...</h3>
@@ -46,29 +46,38 @@ const Products = () => {
 
   return (
     <Wrapper>
-      <Container>
-        <Row className="cstm-row">
-          <Col sm={2} className="mb-3">
-            <Filters />
-          </Col>
-          <Col sm={10}>
-            <Container fluid>
-              <Sort />
-              <ProductList />
-              <Pagination />
-            </Container>
-          </Col>
-        </Row>
-      </Container>
+      <Row>
+        <Col sm={3} md={4} lg={3} xl={2} className="filter">
+          <Filters />
+        </Col>
+        <Col sm={9} md={8} lg={9} xl={10}>
+          <Row className="sort">
+            <Sort />
+          </Row>
+          <div className="product-container">
+            <ProductList />
+          </div>
+        </Col>
+      </Row>
     </Wrapper>
   );
 };
 export default Products;
 
-const Wrapper = styled.div`
-  .cstm-row {
-    min-height: calc(100vh - var(--nav-height));
-    margin: 1rem 0;
+const Wrapper = styled(Container)`
+  background: #fff;
+  border-radius: 0.25rem;
+  box-shadow: var(--light-shadow);
+  .filter{
+    background: #f8f8f8;
+    box-shadow: var(--light-shadow);
+    padding: 1rem;
+  }
+  .sort{
+    padding:0.5rem;
+    background:#f8f8f8;
+    box-shadow: var(--light-shadow);
+    margin-bottom: 1rem;
   }
   .colors {
     display: flex;

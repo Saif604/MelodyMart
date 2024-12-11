@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { GridItem } from "./index";
+import { GridItem,Pagination } from "./index";
 import { useSelector } from "react-redux";
 import { formatPrice } from "../utils/format";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +48,7 @@ const ProductList = () => {
               </Col>
             </ListItem>
           ))}
+          <Pagination/>
     </Row>
   );
 };

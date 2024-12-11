@@ -2,16 +2,19 @@ import Modal from "./modal.styled";
 import { closeModal } from "../../features/Modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Form } from "react-bootstrap";
-import { useState} from "react";
+import { useState } from "react";
 
-const EditUser = ({ handleUpdate, isPasswordEdit }) => {
+const EditUser = ({ handleUpdate, isPasswordEdit, updateStatus }) => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((store) => store.modal);
   const [formData, setFormData] = useState({
     name: modalData.name,
     email: modalData.email,
   });
-  const [passwords, setPasswords] = useState({ oldPassword: "", newPassword: "" });
+  const [passwords, setPasswords] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
 
   const handleChange = (data) => {
     if (!isPasswordEdit) {
@@ -25,13 +28,11 @@ const EditUser = ({ handleUpdate, isPasswordEdit }) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(passwords)
     e.preventDefault();
     if (!isPasswordEdit) {
       handleUpdate(formData);
-    }
-    else{
-        handleUpdate(passwords);
+    } else {
+      handleUpdate(passwords);
     }
   };
   return (
@@ -101,7 +102,15 @@ const EditUser = ({ handleUpdate, isPasswordEdit }) => {
             </Row>
           )}
 
-          <button className="button" type="submit">
+          <button
+            className="button"
+            type="submit"
+            disable={
+              isPasswordEdit
+                ? updateStatus.updateUserPassword.loading
+                : updateStatus.updateUser.loading
+            }
+          >
             submit
           </button>
         </Form>

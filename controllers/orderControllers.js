@@ -25,7 +25,7 @@ const createOrder = async (req, res) => {
     if (!dbProduct) {
       throw new NotFoundError(`No product with id: ${item.product}`);
     }
-    const { name, price, images, _id, colors } = dbProduct;
+    const { name, price, images, _id, colors,company } = dbProduct;
     if (!colors.includes(item.color)) {
       throw new BadRequestError("Provided color is not availabe");
     }
@@ -36,6 +36,7 @@ const createOrder = async (req, res) => {
       image: images[0].url,
       product: _id,
       color: item.color,
+      company
     };
     //add items to order
     orderItems = [...orderItems, singleOrderItem];
@@ -136,9 +137,7 @@ const updateOrder = async (req, res) => {
 };
 
 const getCurrentUserOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user.userId }).populate(
-    "orderItems.product"
-  );
+  const orders = await Order.find({ user: req.user.userId });
 
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };

@@ -18,13 +18,13 @@ export const verifyPayment = createAsyncThunk(
 );
 
 const initialState = {
-  ordersLoading: false,
-  ordersError: false,
   allOrders: [],
   allOrdersCount: 0,
+  allOrdersFormatedData:[],
   currentUserOrders: [],
   totalCurrentUserOrder: 0,
   orderCheckout: null,
+  currentUserFormatedOrders:[],
   allOrderColumns: [
     { field: "orderId", label: "Order ID" },
     {
@@ -45,6 +45,12 @@ const initialState = {
     { field: "updatedAt", label: "Updated At" },
     { field: "status", label: "Status" },
   ],
+  status:{
+    getCurrentUserOrders:{loading:true,error:null},
+    getAllOrders:{loading:true,error:null},
+    createOrder:{loading:true,error:null},
+    verifyPayment:{loading:true,error:null}
+  }
 };
 
 const orderSlice = createSlice({
@@ -63,46 +69,54 @@ const orderSlice = createSlice({
       })
       .addCase(getCurrentUserOrders.fulfilled, (state, action) => {
         const { orders, count } = action.payload;
-        state.currentUserOrders = orders.map((order) => ({
+        state.currentUserOrders = orders;
+        state.totalCurrentUserOrder = count;
+        state.currentUserFormatedOrders = orders.map((order) => ({
           ...order,
           createdAt: formatDate(order.createdAt),
           updatedAt: formatDate(order.updatedAt),
           total: formatPrice(order.total),
         }));
-        state.totalCurrentUserOrder = count;
-        state.ordersLoading = false;
+        state.status.getCurrentUserOrders.loading = false;
       })
       .addCase(getCurrentUserOrders.rejected, (state, action) => {
-        state.ordersLoading = false;
-        state.ordersError = true;
+        state.status.getCurrentUserOrders.loading = true;
+        state.status.getCurrentUserOrders.error = action.payload;
         toast.error(action.payload);
       })
       .addCase(createOrder.pending, (state) => {
-        state.ordersLoading = true;
+        state.status.createOrder.loading = true;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         const { order } = action.payload;
         state.orderCheckout = order;
-        state.ordersLoading = false;
+        state.status.createOrder.loading = false;
       })
       .addCase(createOrder.rejected, (state, action) => {
-        state.ordersLoading = false;
+        state.status.createOrder.loading = false;
+        state.status.createOrder.error = action.payload;
         toast.error(action.payload);
       })
-      .addCase(verifyPayment.pending, (state) => {})
+      .addCase(verifyPayment.pending, (state) => {
+        state.status.verifyPayment.loading = true;
+      })
       .addCase(verifyPayment.fulfilled, (state, action) => {
         state.orderCheckout = null;
+        state.status.verifyPayment.loading = false;
         toast.success('Payment verified...');
       })
       .addCase(verifyPayment.rejected, (state, action) => {
+        state.status.verifyPayment.loading = false;
+        state.status.verifyPayment.error = action.payload;
         toast.error(action.payload);
       })
       .addCase(getAllOrders.pending, (state) => {
-        state.ordersLoading = true;
+        state.status.getAllOrders.loading = true;
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         const { orders } = action.payload;
-        state.allOrders = orders.map((order) => ({
+        state.allOrders = orders;
+        state.allOrdersFormatedData = orders.map((order) => ({
           orderId: order._id,
           createdBy: order.user.name,
           orderItems: order.orderItems.length,
@@ -111,11 +125,12 @@ const orderSlice = createSlice({
           total: formatPrice(order.total),
           status: order.status,
         }));
-        state.ordersLoading = false;
+        state.status.getAllOrders.loading = false;
       })
       .addCase(getAllOrders.rejected,(state,action)=>{
+        state.status.getAllOrders.loading = false;
+        state.status.getAllOrders.error = action.payload;
         toast.error(action.payload);
-        state.ordersLoading = false;
       })
   },
 });

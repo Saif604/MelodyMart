@@ -6,7 +6,7 @@ import styled from "styled-components";
 const ViewReview = () => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((states) => states.modal);
-  const { singleProductReviews, singleProductTotalReviews } = modalData;
+  const { singleProductReviews, singleProductReviewsCount } = modalData;
   const handleClose = () => {
     dispatch(closeModal());
   };
@@ -19,9 +19,9 @@ const ViewReview = () => {
         <Wrapper>
           <h4>
             Review Count:
-            <span className="text-muted">{singleProductTotalReviews ?? 0}</span>
+            <span className="text-muted">{singleProductReviewsCount ?? 0}</span>
           </h4>
-          {singleProductTotalReviews < 1 && (
+          {singleProductReviewsCount < 1 && (
             <h5 className="text-muted">No review are present on this product</h5>
           )}
           {singleProductReviews?.map(

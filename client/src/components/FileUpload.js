@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FcRemoveImage } from "react-icons/fc";
 import { FaRegFileImage } from "react-icons/fa";
 
-const FileUpload = ({ form, field }) => {
+const FileUpload = ({ form, field}) => {
   const [previews, setPreviews] = useState([...form.values[field.name]] || []);
 
   const handleFileChange = (event) => {
@@ -12,16 +12,18 @@ const FileUpload = ({ form, field }) => {
     setPreviews(filePreviews);
     form.setFieldTouched(field.name,true);
     form.setFieldValue(field.name,selectedFiles);
+    event.target.value = ""; //This will trigger filechange handler when same images are uploaded again
   };
   const handleFileRemove = (event) => {
     event.stopPropagation();
     setPreviews([]);
+    form.setFieldValue(field.name,[]);
   };
-    useEffect(() => {
-      if (!form.isSubmitting && form.values[field.name].length === 0) {
+    useEffect(()=>{
+      if(form.isSubmitting){
         setPreviews([]);
       }
-    }, [form.isSubmitting, form.values, field.name]);
+    },[form.isSubmitting])
 
   return (
     <Wrapper>
@@ -64,7 +66,7 @@ const FileUpload = ({ form, field }) => {
                 </span>
                 <div className="upload-msg">
                   Drag & Drop file here or
-                  <button className="btn btn-light">Choose file</button>
+                  <button className="btn btn-light" type="button">Choose file</button>
                 </div>
               </>
             )}

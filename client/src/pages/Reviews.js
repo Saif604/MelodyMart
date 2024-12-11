@@ -9,7 +9,7 @@ import { closeModal, openModal } from "../features/Modal/modalSlice";
 
 const Reviews = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, reviews, totalReviews} = useSelector(
+  const { status, currentUserReviews, currentUserReviewsCount} = useSelector(
     (store) => store.reviews
   );
   const {show} = useSelector((store)=>store.modal);
@@ -34,17 +34,17 @@ const Reviews = () => {
     }).catch((err)=>{console.error(err)})
   }
 
-  if (isLoading) {
+  if (status.getCurrentUserReviews.loading) {
     return (
       <div className="page flx-cntr">
         <Spinner animation="grow" className="loadder" />
       </div>
     );
   }
-  if (isError) {
+  if (status.getCurrentUserReviews.error) {
     return <h3>There is some error...</h3>;
   }
-  if (!totalReviews) {
+  if (!currentUserReviewsCount) {
     return <h3>No reviews available</h3>;
   }
 
@@ -55,7 +55,7 @@ const Reviews = () => {
         <hr />
       </div>
       <Row className="g-3">
-        {reviews.map((review, index) => (
+        {currentUserReviews.map((review, index) => (
           <Col md={6} xl={4} key={index}>
             <ReviewCard review={review} sno={index + 1} onEdit={handleEdit} onDelete={handleDelete}/>
           </Col>

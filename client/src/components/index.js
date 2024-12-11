@@ -39,6 +39,7 @@ import TextEnter from "./TextEnter";
 import SelectInput from "./SelectInput";
 import FileUpload from "./FileUpload";
 import ProductForm from "./ProductForm";
+import WrapperCard from "./WrapperCard";
 
 export {
   Logo,
@@ -81,5 +82,6 @@ export {
   TextEnter,
   SelectInput,
   FileUpload,
-  ProductForm
+  ProductForm,
+  WrapperCard
 };

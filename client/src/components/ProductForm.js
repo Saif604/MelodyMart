@@ -1,62 +1,24 @@
 import styled from "styled-components";
 import { Form, Field, Formik } from "formik";
 import * as Yup from "yup";
-import { Row, Col, Form as BsForm, Button, Spinner } from "react-bootstrap";
+import { Row, Col, Form as BsForm, Spinner } from "react-bootstrap";
 import { TextEnter, SelectInput, FileUpload } from "./index";
+import { formData } from "../utils/products";
 
-const COMPANIES = [
-  {
-    value: "sennheister",
-    label: "Sennheister",
-  },
-  {
-    value: "gibson",
-    label: "Gibson",
-  },
-  {
-    value: "yamha",
-    label: "Yamha",
-  },
-  {
-    value: "kawai",
-    label: "Kawai",
-  },
-];
-const CATEGORIES = [
-  {
-    value: "flue",
-    label: "Flue",
-  },
-  {
-    value: "drum",
-    label: "Drum",
-  },
-  {
-    value: "guitar",
-    label: "Guitar",
-  },
-  {
-    value: "accordion",
-    label: "Accordion",
-  },
-  {
-    value: "piano",
-    label: "Piano",
-  },
-];
 const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
   const initialValues = {
     name: initialData?.name ?? "",
     price: initialData?.price ?? 208,
     description: initialData?.description ?? "",
-    category: initialData?.category ?? "",
-    company: initialData?.company ?? "",
+    category: initialData?.category ?? "flute",
+    company: initialData?.company ?? "sennheister",
     featured: initialData?.featured ?? false,
     freeShipping: initialData?.freeShipping ?? true,
-    inventory: initialData?.inventory ?? 0,
+    inventory: initialData?.inventory ?? 1,
     colors: initialData?.colors ?? [],
-    images: initialData?.images?.map(({url})=>url) ?? [],
+    images: initialData?.images?.map(({ url }) => url) ?? [],
   };
+  console.log("parent");
 
   const ValidationSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -64,7 +26,6 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
       .required("Price is required")
       .min(50, "Price must me atleast 1 rupee")
       .max(1000, "Price must not be more than 10 rupees"),
-    company: Yup.string().required("Company is required"),
     inventory: Yup.number()
       .required("Inventory is required")
       .min(1, "Inventory must be atleast one"),
@@ -73,7 +34,7 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
       .min(1, "At least one color is required")
       .max(5, "You can add up to 5 colors only")
       .required("Colors are required"),
-    description:Yup.string().required("Product description is required"),
+    description: Yup.string().required("Product description is required"),
     images: Yup.array()
       .required("You must upload exactly 5 images.")
       .length(5, "You must upload exactly 5 images."),
@@ -83,73 +44,44 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={ValidationSchema}
-        onSubmit={(values, action) => {
-          handleSubmit(values);
-          action.resetForm();
+        onSubmit={(values, {resetForm}) => {
+          handleSubmit(values,resetForm);
         }}
       >
-        {({ values, handleBlur,isSubmitting }) => (
+        {({ values, isSubmitting,errors,touched}) => (
           <Form>
-            <h3>{title}</h3>
+            <h4>{title}</h4>
             <hr />
             <Row>
               <Col sm={12} className="mb-3">
                 <Field
                   name="images"
                   component={FileUpload}
-                  label="Upload Images"
                   multiple={true}
-                  maxFiles={5}
-                  onBlur={handleBlur}
                 />
               </Col>
-              <Col sm={12} md={6} lg={4} className="mb-3">
-                <Field
-                  component={TextEnter}
-                  name="name"
-                  label="Name"
-                  placeholder="Enter product name"
-                  id="name"
-                />
-              </Col>
-              <Col sm={12} md={6} lg={4} className="mb-3">
-                <Field
-                  component={TextEnter}
-                  name="price"
-                  type="number"
-                  label="Price"
-                  placeholder="Enter product Price"
-                  id="price"
-                />
-              </Col>
-              <Col sm={12} md={6} lg={4} className="mb-3">
-                <Field
-                  name="company"
-                  component={SelectInput}
-                  label="Company"
-                  id="company"
-                  options={COMPANIES}
-                />
-              </Col>
-              <Col sm={12} md={6} lg={4} className="mb-3">
-                <Field
-                  name="category"
-                  component={SelectInput}
-                  label="Category"
-                  id="category"
-                  options={CATEGORIES}
-                />
-              </Col>
-              <Col sm={12} md={6} lg={4} className="mb-3">
-                <Field
-                  component={TextEnter}
-                  name="inventory"
-                  type="text"
-                  placeholder="Enter product inventory"
-                  label="Inventory"
-                  id="inventory"
-                />
-              </Col>
+              {formData.input.map((item, index) => (
+                <Col sm={12} md={6} lg={4} className="mb-3" key={index}>
+                  <Field
+                    component={TextEnter}
+                    name={item.name}
+                    label={item.label}
+                    placeholder={item.placeholder}
+                    id={item.id}
+                  />
+                </Col>
+              ))}
+              {formData.select.map((item, index) => (
+                <Col sm={12} md={6} lg={4} className="mb-3" key={index}>
+                  <Field
+                    name={item.name}
+                    component={SelectInput}
+                    label={item.label}
+                    id={item.id}
+                    options={item.options}
+                  />
+                </Col>
+              ))}
               <Col
                 sm={12}
                 md={6}
@@ -157,64 +89,36 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
                 className="mb-3 d-flex align-items-center"
               >
                 <div>
-                  <Field
-                    as={BsForm.Check}
-                    name="featured"
-                    label="Featured"
-                    checked={values.featured}
-                  />
-                  <Field
-                    as={BsForm.Check}
-                    name="freeShipping"
-                    label="Shipping"
-                    checked={values.freeShipping}
-                  />
+                  {formData.checkbox.map((item, index) => (
+                    <Field
+                      as={BsForm.Check}
+                      name={item.name}
+                      label={item.label}
+                      checked={values[item.name]}
+                      key={index}
+                    />
+                  ))}
                 </div>
               </Col>
               <Col sm={12} className="mb-3">
                 <BsForm.Group controlId="form-colors">
                   <BsForm.Label>Colors</BsForm.Label>
                   <Row>
-                    <Col sm={6} md={3}>
-                      <Field
-                        as={BsForm.Check}
-                        label="#191970"
-                        name="colors"
-                        id="colors"
-                        value="#191970"
-                        checked={values.colors.includes("#191970")}
-                      />
-                    </Col>
-                    <Col sm={6} md={3}>
-                      <Field
-                        as={BsForm.Check}
-                        label="#50C878"
-                        value="#50C878"
-                        name="colors"
-                        id="colors"
-                        checked={values.colors.includes("#50C878")}
-                      />
-                    </Col>
-                    <Col sm={6} md={3}>
-                      <Field
-                        as={BsForm.Check}
-                        label="#FF4500"
-                        value="#FF4500"
-                        name="colors"
-                        id="colors"
-                        checked={values.colors.includes("#FF4500")}
-                      />
-                    </Col>
-                    <Col sm={6} md={3}>
-                      <Field
-                        as={BsForm.Check}
-                        label="#B76E79"
-                        value="#B76E79"
-                        name="colors"
-                        id="colors"
-                        checked={values.colors.includes("#B76E79")}
-                      />
-                    </Col>
+                    {formData.checks.map((item, index) => (
+                      <Col sm={6} md={3} key={index}>
+                        <Field
+                          as={BsForm.Check}
+                          label={item.label}
+                          name={item.name}
+                          id={item.id}
+                          value={item.value}
+                          checked={values.colors.includes(item.value)}
+                        />
+                      </Col>
+                    ))}
+                    {
+                      touched["colors"] && !!errors["colors"] && <p className="text-danger">{errors["colors"]}</p>
+                    }
                   </Row>
                 </BsForm.Group>
               </Col>
