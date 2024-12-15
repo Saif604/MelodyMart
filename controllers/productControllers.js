@@ -5,7 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
 const createProduct = async (req, res) => {
-  let { colors, ...rest } = req.body;
+  let  { colors, ...rest } = req.body;
   if (!req.files || !req.files.images) {
     throw new BadRequestError("No file uploaded");
   }
@@ -43,14 +43,10 @@ const createProduct = async (req, res) => {
     // Remove the temporary file
     fs.unlinkSync(img.tempFilePath);
   }
-
-  //Parse colors if it a JSON string;
-  if (typeof colors === "string") {
-    colors = JSON.parse(colors);
-  }
+  
   // Create the product with the uploaded image URLs
   const product = new Product({
-    colors,
+    colors:[...colors],
     ...rest,
     user: req.user.userId,
     images: [...imageDetails],
@@ -163,6 +159,7 @@ const getSingleProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id: productID } = req.params;
+  const {colors,...rest} = req.body;
   const product = await Product.findById(productID);
   if (!product) {
     throw new NotFoundError(`No product with id: ${productID}`);
@@ -198,7 +195,8 @@ const updateProduct = async (req, res) => {
   const updatedProduct = await Product.findByIdAndUpdate(
     productID,
     {
-      ...req.body,
+      ...rest,
+      colors:[...colors],
       images: newImages.length > 0 ? newImages : product.images, // Use new images if provided, else keep old ones
     },
     { new: true, runValidators: true }

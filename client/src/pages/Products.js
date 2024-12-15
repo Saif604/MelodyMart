@@ -45,7 +45,7 @@ const Products = () => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper className="page">
       <Row>
         <Col sm={3} md={4} lg={3} xl={2} className="filter">
           <Filters />
@@ -65,6 +65,8 @@ const Products = () => {
 export default Products;
 
 const Wrapper = styled(Container)`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   background: #fff;
   border-radius: 0.25rem;
   box-shadow: var(--light-shadow);

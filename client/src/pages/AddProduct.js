@@ -14,7 +14,7 @@ const AddProduct = () => {
             formData.append("images", file);
           });
         } else {
-          formData.append(key, JSON.stringify(value));
+         value.forEach((item) => formData.append(key, item));
         }
       } else {
         formData.append(key, value);

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ReviewCard = ({ review, sno, onEdit, onDelete }) => {
+const ReviewCard = ({ review, sno, onEdit, onDelete,isLoading }) => {
   const {
     _id: reviewId,
     createdAt,
@@ -14,26 +14,26 @@ const ReviewCard = ({ review, sno, onEdit, onDelete }) => {
     <Wrapper>
       <div className="card-header">
         <h5 className="mb-0">Review No: {sno}</h5>
-        <span>{createdAt.split("T")[0]}</span>
+        <span className="text-muted">{createdAt.split("T")[0]}</span>
       </div>
       <hr />
       <div className="review-details">
         <div className="image-container mb-1">
           <img src={images[0].url} alt="prod-img" className="image-fit" />
         </div>
-        <h5>
+        <h6>
           Review Id: <span className="ms-2 text-muted">{reviewId}</span>
-        </h5>
-        <h5>
+        </h6>
+        <h6>
           Rating: <span className="ms-2 text-muted">{rating}</span>
-        </h5>
+        </h6>
         <h6 className="text-capitalize">{title}</h6>
         <p className="text-capitalize">{comment}</p>
         <div className="btns-container">
           <button className="btn btn-dark" onClick={() => onEdit(review)}>
             Edit
           </button>
-          <button className="btn btn-dark" onClick={() => onDelete(reviewId)}>
+          <button className="btn btn-dark" onClick={() => onDelete(reviewId)} disabled={isLoading}>
             Delete
           </button>
         </div>

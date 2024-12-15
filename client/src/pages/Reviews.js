@@ -57,12 +57,12 @@ const Reviews = () => {
       <Row className="g-3">
         {currentUserReviews.map((review, index) => (
           <Col md={6} xl={4} key={index}>
-            <ReviewCard review={review} sno={index + 1} onEdit={handleEdit} onDelete={handleDelete}/>
+            <ReviewCard review={review} sno={index + 1} onEdit={handleEdit} onDelete={handleDelete} isLoading={status.deleteReview.loading}/>
           </Col>
         ))}
       </Row>
       {
-        show && (<ReviewModal handleUpdate={handleUpdate} title={"Edit Review"}/>)
+        show && (<ReviewModal handleUpdate={handleUpdate} title={"Edit Review"} isLoading={status.updateReview.loading}/>)
       }
       
     </div>

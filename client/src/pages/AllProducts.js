@@ -41,7 +41,7 @@ const AllProducts = () => {
             formData.append("images", file);
           });
         } else {
-          formData.append(key, JSON.stringify(value));
+          value.forEach((item)=>formData.append(key,item))
         }
       } else {
         formData.append(key, value);
@@ -71,18 +71,19 @@ const AllProducts = () => {
         <div className="d-flex align-items-center justify-content-between">
           <span>{product.company}</span>
           <div className="d-flex gap-5">
-            <span
-              className="icon"
+            <button
+              className="ibtn"
               onClick={() => handleProductEdit(product.productId)}
             >
               <FaEdit />
-            </span>
-            <span
-              className="icon"
+            </button>
+            <button
+              className="ibtn dbtn"
               onClick={() => handleProductDelete(product.productId)}
+              disabled={status.deleteProduct.loading}
             >
               <ImBin />
-            </span>
+            </button>
           </div>
         </div>
       );
@@ -93,7 +94,7 @@ const AllProducts = () => {
     <WrapperCard>
       <div>
         <div>
-          <h3>All Products: </h3>
+          <h4>All Products: </h4>
           <hr />
         </div>
         <DataTable columns={allProductsTableColumns} data={tableData} />

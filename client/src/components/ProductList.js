@@ -9,7 +9,7 @@ const ProductList = () => {
   const navigate = useNavigate();
   const { products, isGrid } = useSelector((state) => state.products);
   if (products.length < 1) {
-    return <p className="text-danger">Sorry, no product found</p>;
+    return <h6 className="text-danger">Sorry, no product found</h6>;
   }
   const isDashboard = window.location.pathname.split("/").includes("dashboard");
   return (

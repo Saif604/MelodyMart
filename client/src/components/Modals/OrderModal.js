@@ -31,7 +31,7 @@ const OrderModal = ({ closeModal }) => {
       </Modal.Header>
       <Modal.Body>
         <Row>
-          <p className="fw-bolder fs-5 text-muted mb-1">Order Items: </p>
+          <h5>Order Items: </h5>
           {orderItems?.map(({ _id,image, name }) => (
             <Col className="mb-3" sm={3} key={_id}>
               <img
@@ -45,22 +45,22 @@ const OrderModal = ({ closeModal }) => {
         </Row>
         <Row>
           <Col>
-            <span className="fw-bolder text-muted">Order Id:</span>
+            <h6 className="mb-1">Order Id:</h6>
             <p>{orderId}</p>
           </Col>
           <Col>
-            <span className="fw-bolder text-muted">Order Total:</span>
+            <h6 className="mb-1">Order Total:</h6>
             <p>{orderTotal}</p>
           </Col>
         </Row>
         <Row>
           <Col>
-            <span className="fw-bolder text-muted">Status:</span>
-            <p>
+            <h6 className="mb-1">Status:</h6>
+            <p className="text-capitalize">
               {status}
               {status === "pending" && (
                 <span
-                  className="fw-bolder fs-5 ms-2 btn"
+                  className="fw-bolder fs-5 ms-2 btn btn-light p-0"
                   onClick={() => handleCheckout(modalData)}
                 >
                   <TbEdit />
@@ -69,17 +69,17 @@ const OrderModal = ({ closeModal }) => {
             </p>
           </Col>
           <Col>
-            <span className="fw-bolder text-muted">Payment Id:</span>
+            <h6 className="mb-1">Payment Id:</h6>
             <p>{paymentId}</p>
           </Col>
         </Row>
         <Row>
           <Col>
-            <span className="fw-bolder text-muted">Created At:</span>
+            <h6 className="mb-1">Created At:</h6>
             <p>{createdAt}</p>
           </Col>
           <Col>
-            <span className="fw-bolder text-muted">Updated At:</span>
+            <h6 className="mb-1">Updated At:</h6>
             <p>{updatedAt}</p>
           </Col>
         </Row>

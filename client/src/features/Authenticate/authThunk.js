@@ -2,6 +2,7 @@ import axios from "axios";
 import { clearAllReviews } from "../Review/reviewSlice";
 import { clearAllProductStates } from "../Products/productsSlice";
 import { clearAllOrders } from "../Orders/ordersSlice";
+import { clearAllUserStates } from "../User/userSlice";
 const registerUserThunk = async(userData,thunkAPI)=>{
   const {rejectWithValue} = thunkAPI;
     try{
@@ -28,9 +29,10 @@ const logoutUserThunk =  async (_,thunkAPI) => {
   const {dispatch,rejectWithValue} = thunkAPI;
   try {
     const { data } = await axios.get("/api/v1/auth/logout");
-    dispatch(clearAllReviews());
+    dispatch(clearAllUserStates());
     dispatch(clearAllProductStates());
     dispatch(clearAllOrders());
+    dispatch(clearAllReviews());
     return data;
   } catch (err) {
     return rejectWithValue(err.response.data.msg);

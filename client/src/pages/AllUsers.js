@@ -28,7 +28,7 @@ const AllUsers = () => {
     <WrapperCard>
       <div>
         <div>
-          <h3>All Users: </h3>
+          <h4>All Users: </h4>
           <hr />
         </div>
         <DataTable columns={allUsersTableColumns} data={allUsersTableData} />

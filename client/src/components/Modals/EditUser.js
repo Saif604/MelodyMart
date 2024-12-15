@@ -1,10 +1,10 @@
 import Modal from "./modal.styled";
 import { closeModal } from "../../features/Modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form, Spinner } from "react-bootstrap";
 import { useState } from "react";
 
-const EditUser = ({ handleUpdate, isPasswordEdit, updateStatus }) => {
+const EditUser = ({ handleUpdate, isPasswordEdit,isUpdating }) => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((store) => store.modal);
   const [formData, setFormData] = useState({
@@ -102,16 +102,18 @@ const EditUser = ({ handleUpdate, isPasswordEdit, updateStatus }) => {
             </Row>
           )}
 
-          <button
-            className="button"
-            type="submit"
-            disable={
-              isPasswordEdit
-                ? updateStatus.updateUserPassword.loading
-                : updateStatus.updateUser.loading
-            }
-          >
-            submit
+          <button className="button" type="submit" disabled={false}>
+            {isUpdating ? (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              <span>Submit</span>
+            )}
           </button>
         </Form>
       </Modal.Body>

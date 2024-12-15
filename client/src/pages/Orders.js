@@ -45,7 +45,7 @@ const Orders = () => {
           <span>{order._id}</span>
           <Link
             to={`/dashboard/orders`}
-            className="icon"
+            className="ibtn"
             onClick={() => handleModalOpen(order)}
           >
             <TbEye />

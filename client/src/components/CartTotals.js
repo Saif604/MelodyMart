@@ -4,11 +4,13 @@ import { formatPrice } from "../utils/format";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../features/Orders/ordersSlice";
+import {Spinner} from "react-bootstrap";
 
 const CartTotals = () => {
   const { totalAmount, shippingFee, tax, cart } = useSelector(
     (states) => states.cart
   );
+  const {status} = useSelector((store)=>store.orders);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleCheckout = () => {
@@ -35,8 +37,22 @@ const CartTotals = () => {
             <span>{formatPrice(totalAmount + shippingFee + tax)}</span>
           </h4>
         </article>
-        <button className="button" onClick={handleCheckout}>
-          proceed to checkout
+        <button
+          className="button"
+          onClick={handleCheckout}
+          disabled={status.createOrder.loading}
+        >
+          {status.createOrder.loading ? (
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          ) : (
+            <span>proceed to checkout</span>
+          )}
         </button>
       </div>
     </Wrapper>

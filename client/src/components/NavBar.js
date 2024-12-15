@@ -1,4 +1,5 @@
 import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
+import BrandImage from "../assets/images/logo.svg"
 import { NavLink } from "react-router-dom";
 import Wrapper from "../assets/wrappers/NavBar.js";
 import { useState } from "react";
@@ -15,7 +16,7 @@ const NavBar = () => {
     <Wrapper expand={"md"} sticky="top">
       <Container>
         <Navbar.Brand as={NavLink} to="/">
-          Fizmar
+          <img src={BrandImage} alt="brand" className="image-fit" />
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="offcanvasNavbar-expand-md"
@@ -30,7 +31,7 @@ const NavBar = () => {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title id="offcanvasNavbarLabel-expand-md">
-              Fizmar
+              MelodyMart
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>

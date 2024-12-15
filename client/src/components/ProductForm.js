@@ -18,7 +18,6 @@ const ProductForm = ({ initialData, handleSubmit, isLoading, title }) => {
     colors: initialData?.colors ?? [],
     images: initialData?.images?.map(({ url }) => url) ?? [],
   };
-  console.log("parent");
 
   const ValidationSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),

@@ -83,5 +83,5 @@ export {
   SelectInput,
   FileUpload,
   ProductForm,
-  WrapperCard
+  WrapperCard,
 };

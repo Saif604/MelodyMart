@@ -50,7 +50,9 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    clearAllUserStates: () => initialState
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllUsers.pending, (state) => {
@@ -114,5 +116,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {} = userSlice.actions;
+export const {clearAllUserStates} = userSlice.actions;
 export default userSlice.reducer;

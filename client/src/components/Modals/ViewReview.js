@@ -17,12 +17,12 @@ const ViewReview = () => {
       </Modal.Header>
       <Modal.Body>
         <Wrapper>
-          <h4>
+          <h5>
             Review Count:
-            <span className="text-muted">{singleProductReviewsCount ?? 0}</span>
-          </h4>
+            <span className="text-muted ms-2">{singleProductReviewsCount ?? 0}</span>
+          </h5>
           {singleProductReviewsCount < 1 && (
-            <h5 className="text-muted">No review are present on this product</h5>
+            <h6 className="text-muted">No review are present on this product</h6>
           )}
           {singleProductReviews?.map(
             ({ title, comment, user: { name }, _id }) => (

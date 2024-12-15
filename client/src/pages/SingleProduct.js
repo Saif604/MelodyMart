@@ -16,6 +16,7 @@ const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { status, singleProduct } = useSelector((state) => state.products);
+  const {status:reviewStatus} = useSelector((store)=>store.reviews);
   const { singleProductReviews, singleProductReviewsCount } = useSelector(
     (state) => state.reviews
   );
@@ -70,7 +71,7 @@ const SingleProduct = () => {
         </Row>
         {show && isView && <ViewReview />}
         {show && !isView && (
-          <ReviewModal handleUpdate={handleAddReview} title={"Add Review"} />
+          <ReviewModal handleUpdate={handleAddReview} title={"Add Review"} isLoading={reviewStatus.createReview.loading}/>
         )}
       </Container>
     </WrapperCard>

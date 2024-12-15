@@ -8,10 +8,8 @@ import { verifyPayment } from "../features/Orders/ordersSlice";
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { orderCheckout, status } = useSelector(
-    (store) => store.orders
-  );
-  const {name,email}= useSelector((store)=>store.auth.user);
+  const { orderCheckout, status } = useSelector((store) => store.orders);
+  const { name, email } = useSelector((store) => store.auth.user);
 
   if (status.createOrder.loading) {
     return (
@@ -40,64 +38,67 @@ const Checkout = () => {
   }
 
   function loadScript(src) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = src;
       script.onload = () => {
         resolve(true);
       };
       script.onerror = () => {
-        resolve(false);
+        reject(new Error("Script failed to load"));
       };
       document.body.appendChild(script);
     });
   }
 
   async function displayRazorpay() {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
+    try {
+      const res = await loadScript(
+        "https://checkout.razorpay.com/v1/checkout.js"
+      );
+      if (!res) {
+        toast.error("Razorpay SDK failed to load. Are you online");
+        return;
+      }
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_API_KEY,
+        amount: orderCheckout?.orderSecrets?.amount,
+        currency: orderCheckout?.orderSecrets?.currency,
+        name: "Melody Mart",
+        description: "Test Transaction",
+        image: {},
+        order_id: orderCheckout?.orderSecrets?.id,
+        handler: async function (response) {
+          const paymentData = {
+            orderId: orderCheckout?._id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+          };
+          const result = await dispatch(verifyPayment(paymentData));
+          if (verifyPayment.fulfilled.match(result)) {
+            navigate("/dashboard/orders");
+          }
+        },
+        prefill: {
+          name,
+          email,
+          contact: "9987393129",
+        },
+        notes: {
+          address: "F87,Gulluk Bazar, Mehandi Nagar, Osaka - A8901",
+        },
+        theme: {
+          color: "#3b0853",
+        },
+      };
 
-    if (!res) {
-      toast.error("Razorpay SDK failed to load. Are you online?");
-      return;
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      toast.error("Razorpay SDK failed to load. Please try again");
+      console.log(error);
     }
-
-    const options = {
-      key: process.env.REACT_APP_RAZORPAY_API_KEY,
-      amount: orderCheckout?.orderSecrets?.amount,
-      currency: orderCheckout?.orderSecrets?.currency,
-      name: "MelodyMine",
-      description: "Test Transaction",
-      image: {},
-      order_id: orderCheckout?.orderSecrets?.id,
-      handler: async function (response) {
-        const paymentData = {
-          orderId: orderCheckout?._id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: response.razorpay_order_id,
-          razorpaySignature: response.razorpay_signature,
-        };
-        const result = await dispatch(verifyPayment(paymentData));
-        if (verifyPayment.fulfilled.match(result)) {
-          navigate("/dashboard/orders");
-        }
-      },
-      prefill: {
-        name,
-        email,
-        contact: "9987393129",
-      },
-      notes: {
-        address: "F87,Gulluk Bazar, Mehandi Nagar, Osaka - A8901",
-      },
-      theme: {
-        color: "#3b0853",
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
   }
 
   return (
@@ -150,6 +151,7 @@ const Checkout = () => {
 export default Checkout;
 
 const Wrapper = styled.div`
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

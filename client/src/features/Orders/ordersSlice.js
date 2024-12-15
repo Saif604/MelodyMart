@@ -48,8 +48,8 @@ const initialState = {
   status:{
     getCurrentUserOrders:{loading:true,error:null},
     getAllOrders:{loading:true,error:null},
-    createOrder:{loading:true,error:null},
-    verifyPayment:{loading:true,error:null}
+    createOrder:{loading:false,error:null},
+    verifyPayment:{loading:false,error:null}
   }
 };
 
@@ -65,7 +65,7 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCurrentUserOrders.pending, (state) => {
-        state.ordersLoading = true;
+        state.status.getCurrentUserOrders.loading = true;
       })
       .addCase(getCurrentUserOrders.fulfilled, (state, action) => {
         const { orders, count } = action.payload;
@@ -80,7 +80,7 @@ const orderSlice = createSlice({
         state.status.getCurrentUserOrders.loading = false;
       })
       .addCase(getCurrentUserOrders.rejected, (state, action) => {
-        state.status.getCurrentUserOrders.loading = true;
+        state.status.getCurrentUserOrders.loading = false;
         state.status.getCurrentUserOrders.error = action.payload;
         toast.error(action.payload);
       })

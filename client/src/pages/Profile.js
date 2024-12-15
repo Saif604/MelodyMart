@@ -107,7 +107,7 @@ const Profile = () => {
           <EditUser
             handleUpdate={handleUpdate}
             isPasswordEdit={isPasswordEdit}
-            updateStatus={userStatus}
+            isUpdating={userStatus.updateUser.loading || userStatus.updateUserPassword.loading}
           />
         )}
       </Wrapper>

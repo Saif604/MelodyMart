@@ -3,11 +3,9 @@ import { Navbar } from "react-bootstrap";
 const Wrapper = styled(Navbar)`
   background: var(--primary-dark-800);
   height: var(--nav-height);
-
   .navbar-brand {
-    color: var(--light);
-    font-weight: 500;
-    letter-spacing: var(--spacing);
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   .nav-link {

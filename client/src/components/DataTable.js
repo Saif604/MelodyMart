@@ -69,16 +69,26 @@ const Wrapper = styled.div`
     object-fit: cover;
     border-radius: 4px;
   }
-  .icon {
-    opacity: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--gray-700);
-    cursor: pointer;
+  .ibtn {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 4px;
+    color: var(--dark);
     transition: var(--transition);
+    background: transparent;
+    border: 1px solid var(--gray-400);
+    opacity: 0;
   }
-  .icon:hover {
-    color: var(--primary-dark-500);
+  .ibtn:hover{
+    color:var(--primary-dark-500);
+    background: var(--primary-dark-100);
+  }
+  .dbtn:hover {
+    color: var(--primary-light-500);
+    background: var(--primary-light-100);
   }
   thead tr th {
     background: var(--primary-dark-600);
@@ -97,7 +107,7 @@ const Wrapper = styled.div`
   }
   tbody tr:hover {
     background: #e9e9e9;
-    .icon {
+    .ibtn {
       opacity: 1;
     }
   }

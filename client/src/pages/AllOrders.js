@@ -27,7 +27,7 @@ const AllOrders = () => {
     <WrapperCard>
       <div>
         <div>
-          <h3>All Order: </h3>
+          <h4>All Order: </h4>
           <hr />
         </div>
         <DataTable columns={allOrderColumns} data={allOrdersFormatedData} />

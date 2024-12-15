@@ -1,10 +1,10 @@
 import Modal from "./modal.styled";
 import { closeModal } from "../../features/Modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form, Spinner } from "react-bootstrap";
 import { useState } from "react";
 
-const ReviewModal = ({handleUpdate,title}) => {
+const ReviewModal = ({handleUpdate,title,isLoading}) => {
   const dispatch = useDispatch();
   const { show, modalData } = useSelector((store) => store.modal);
   const [formData, setFormData] = useState({
@@ -39,7 +39,9 @@ const ReviewModal = ({handleUpdate,title}) => {
                   type="text"
                   name="rating"
                   value={formData.rating}
-                  onChange={(e) => handleChange({[e.target.name]:e.target.value})}
+                  onChange={(e) =>
+                    handleChange({ [e.target.name]: e.target.value })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -50,7 +52,9 @@ const ReviewModal = ({handleUpdate,title}) => {
                   type="text"
                   name="title"
                   value={formData.title}
-                  onChange={(e) => handleChange({[e.target.name]:e.target.value})}
+                  onChange={(e) =>
+                    handleChange({ [e.target.name]: e.target.value })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -62,12 +66,26 @@ const ReviewModal = ({handleUpdate,title}) => {
                   name="comment"
                   value={formData.comment}
                   row={20}
-                  onChange={(e) => handleChange({[e.target.name]:e.target.value})}
+                  onChange={(e) =>
+                    handleChange({ [e.target.name]: e.target.value })
+                  }
                 />
               </Form.Group>
             </Col>
           </Row>
-          <button className="button" type="submit">submit</button>
+          <button className="button" type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              <span>Submit</span>
+            )}
+          </button>
         </Form>
       </Modal.Body>
     </Modal>
