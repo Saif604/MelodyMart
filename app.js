@@ -24,11 +24,6 @@ export const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
-// Serve static files from the React app only after defining API routes
-if (process.env.NODE_ENV === 'production') {
-  server.use(express.static(path.join(__dirname, 'client', 'build')));
-}
-
 import authRouter from "./routes/authRouters.js";
 import userRouter from "./routes/userRouters.js"
 import productRouter from "./routes/productRouters.js";
