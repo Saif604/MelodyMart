@@ -1,5 +1,5 @@
 import { Home, Products, Logger, Cart,SingleProduct, Orders,Reviews,Profile,Shared,Error,AllUsers,AllProducts,AllOrders, AddProduct} from "./pages";
-import { SharedLayout,Protected,Login,Register, Checkout, RoleProtected,GuardCheckout } from "./components";
+import { SharedLayout,Protected,Login,Register, Checkout, RoleProtected } from "./components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

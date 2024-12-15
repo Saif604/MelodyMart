@@ -29,7 +29,7 @@ const getCurrentUserReviewsThunk = async (_, thunkAPI) => {
 };
 
 const createReviewThunk = async (reviewData, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
+  const {rejectWithValue } = thunkAPI;
   try {
     const { data } = await axios.post("/api/v1/reviews", reviewData);
     return data;
@@ -38,7 +38,7 @@ const createReviewThunk = async (reviewData, thunkAPI) => {
   }
 };
 const getSingleProductReviewsThunk = async (productId, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
+  const { rejectWithValue } = thunkAPI;
   try {
     const { data } = await axios.get(`/api/v1/products/${productId}/reviews`);
     return data;
