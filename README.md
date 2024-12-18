@@ -106,6 +106,7 @@ This project is a fully responsive e-commerce website built with the MERN stack,
 3. **Payment Integration**: Successfully implemented payment functionality with Razorpay.
 4. **Complex Redux Setup**: Managed complex state across the application using Redux Toolkit.
 5. **Image Uploads**: Implemented image uploads and management with Cloudinary.
+6. **Backend Filters**: Implemented advance filter of data from backend.
 
 ---
 

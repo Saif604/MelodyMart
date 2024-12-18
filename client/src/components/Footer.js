@@ -18,5 +18,6 @@ const Wrapper = styled.footer`
     color: var(--light);
     justify-content: center;
     margin: 0;
+    text-transform: capitalize;
   }
 `
